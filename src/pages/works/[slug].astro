@@ -70,8 +70,18 @@ const description = (entry.body ?? "").replace(/\s+/g, " ").trim().slice(0, 160)
     margin: 0 0 1.6em;
     color: var(--muted);
   }
-  .text :global(p) {
+  .text :global(p),
+  .text :global(blockquote) {
     margin: 0;
+  }
+  .text :global(* + p),
+  .text :global(* + blockquote) {
+    margin-top: 1em;
+  }
+  .text :global(blockquote) {
+    padding-left: 1em;
+    border-left: 1px solid var(--muted);
+    color: var(--muted);
   }
   .link {
     margin: 0.6em 0 0;
