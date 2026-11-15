@@ -15,6 +15,8 @@ menu:
     words: [Letters, Briefe, Lettere, Pisma, Писма, Ⱂⰻⱄⰿⰰ]
   - href: /dances/
     words: [Dances, Tänze, Danze, Plesovi, Плесови, Ⱂⰾⰵⱄⱁⰲⰻ]
+  - href: /conversations/
+    words: [Conversations, Gespräche, Conversazioni, Razgovori, Разговори, Ⱃⰰⰸⰳⱁⰲⱁⱃⰻ]
 
 # ---- Text scramble -----------------------------------------------------------
 # One item at a time: resting word -> scramble -> foreign word (held) -> scramble

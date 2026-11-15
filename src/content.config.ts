@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob, file } from "astro/loaders";
+import { parse as parseYaml } from "yaml";
 
 // Works: one Markdown file per work; the body is the short description.
 // Newest first is derived from `date` (the earliest date of the work).
@@ -62,4 +63,24 @@ const upcoming = defineCollection({
   schema: z.object({ title: z.string(), where: z.string() }),
 });
 
-export const collections = { works, letters, dances, tracks, upcoming };
+// Conversations: the shelf of books, films, podcasts and pages, in curated order. The
+// loader hands entries back sorted by id, so the parser records each one's place in the
+// file as `order`.
+export const conversationKinds = ["books", "films", "podcasts", "pages"] as const;
+const conversations = defineCollection({
+  loader: file("src/data/conversations.yaml", {
+    parser: (text) =>
+      (parseYaml(text) as Record<string, unknown>[]).map((entry, order) => ({ ...entry, order })),
+  }),
+  schema: z.object({
+    order: z.number().int(),
+    title: z.string(),
+    by: z.string().default(""),
+    kind: z.enum(conversationKinds),
+    note: z.string().default(""),
+    href: z.url().optional(),
+    pics: z.array(z.object({ src: z.string().default(""), alt: z.string() })).default([]),
+  }),
+});
+
+export const collections = { works, letters, dances, tracks, upcoming, conversations };

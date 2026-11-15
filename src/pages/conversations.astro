@@ -1,0 +1,245 @@
+---
+// Conversations: a shelf of books, films, podcasts and pages, one spine per line.
+// A spine opens (one at a time) to a short note, optional pictures and who made it.
+// The words on the left filter by kind (?kind=films is shareable). Entries come from
+// src/data/conversations.yaml, in its order. Behaviour: src/scripts/conversations.ts.
+//
+// Every entry is in the HTML (the spines are one line each, so even a few hundred are a
+// light page, and the browser's find, back button and scroll position keep working).
+// Past PAGE_SIZE entries the rest wait behind a "more" button rather than an infinite
+// scroll, so the page keeps an end and coming back lands where the visitor left.
+import { getCollection } from "astro:content";
+import Sub from "../layouts/Sub.astro";
+import { media } from "../lib/media";
+import { conversationKinds } from "../content.config";
+
+const PAGE_SIZE = 40;
+
+const items = (await getCollection("conversations"))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map(({ id, data }) => ({
+    id,
+    ...data,
+    pics: data.pics.map((p) => ({ src: media(p.src), alt: p.alt })),
+  }));
+// Only kinds that have entries get a filter word; one kind alone needs no filter.
+const kinds = conversationKinds.filter((k) => items.some((it) => it.kind === k));
+const filters = kinds.length > 1 ? ["all", ...kinds] : [];
+---
+
+<Sub
+  title="Conversations"
+  description="Books, films, podcasts and pages that come up in conversation with Arian Šajina."
+>
+  <div class="view top">
+    <div class="side" data-shelf={JSON.stringify({ pageSize: PAGE_SIZE })}>
+      {filters.length > 0 && (
+        <div class="col" role="group" aria-label="filter by kind">
+          {filters.map((k) => (
+            <button
+              class="flt"
+              type="button"
+              aria-pressed={k === "all" ? "true" : "false"}
+              data-filter={k}
+            >
+              {k}
+            </button>
+          ))}
+        </div>
+      )}
+      <div class="stack">
+        <ul class="shelf">
+          {items.map((it) => (
+            <li class="book" data-kind={it.kind}>
+              <details name="shelf">
+                <summary class="spine">
+                  <span class="bt">{it.title}</span>
+                </summary>
+                <div class="more">
+                  {it.pics.length > 0 && (
+                    <div class:list={["pics", { one: it.pics.length === 1 }]}>
+                      {it.pics.map((p) =>
+                        p.src ? (
+                          <img class="pic" src={p.src} alt={p.alt} loading="lazy" />
+                        ) : (
+                          <div class="pic">[{p.alt}]</div>
+                        ),
+                      )}
+                    </div>
+                  )}
+                  {it.note && <p>{it.note}</p>}
+                  {it.by && (
+                    <p class="by">
+                      {it.href ? (
+                        <a class="lnk" href={it.href} rel="noopener">
+                          {it.by}
+                        </a>
+                      ) : (
+                        it.by
+                      )}
+                    </p>
+                  )}
+                </div>
+              </details>
+            </li>
+          ))}
+        </ul>
+        <button class="flt showmore" type="button" data-shelf-more hidden>
+          more
+        </button>
+      </div>
+    </div>
+  </div>
+</Sub>
+
+<style>
+  .side {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    width: 100%;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  /* Filter words: a column beside the shelf; a row above it on phones. */
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    width: 8em;
+    flex: 0 0 auto;
+  }
+  .stack {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .flt {
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 6px 0;
+    font: inherit;
+    color: var(--muted);
+    cursor: pointer;
+    text-transform: lowercase;
+  }
+  .flt[aria-pressed="true"] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 1px;
+  }
+  .flt:focus-visible,
+  .spine:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+  .shelf {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .book {
+    box-sizing: border-box;
+    margin: 0;
+    width: min(20em, 100%);
+    border: 1px solid var(--edge);
+    background: var(--paper);
+  }
+  .book[hidden] {
+    display: none;
+  }
+  .spine {
+    display: block;
+    padding: 7px 12px;
+    cursor: pointer;
+    list-style: none;
+    text-transform: lowercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .spine::-webkit-details-marker {
+    display: none;
+  }
+  /* An open spine shows its whole title. */
+  details[open] > .spine {
+    white-space: normal;
+  }
+  .more {
+    box-sizing: border-box;
+    padding: 2px 12px 14px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .more p {
+    margin: 0 0 0.8em;
+  }
+  .more .by {
+    margin: 0;
+    color: var(--muted);
+  }
+  .by a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .pics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 4px 0 10px;
+  }
+  .pics.one {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pic {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: var(--placeholder);
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .showmore {
+    margin-top: 10px;
+  }
+  .showmore[hidden] {
+    display: none;
+  }
+  @media (hover: hover) {
+    .flt:hover {
+      color: var(--ink);
+    }
+    .spine:hover .bt {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+  }
+  @media (max-width: 600px) {
+    .side {
+      flex-direction: column;
+      gap: 0;
+    }
+    .col {
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: auto;
+      gap: 4px 22px;
+      margin: 0 0 22px;
+    }
+  }
+</style>
+
+<script>
+  import "../scripts/conversations";
+</script>

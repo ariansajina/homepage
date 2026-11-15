@@ -21,6 +21,7 @@ const ROUTES = [
   "/letters/",
   "/letters/use-signal/",
   "/dances/",
+  "/conversations/",
 ];
 
 function loadPlaywright() {
@@ -169,6 +170,37 @@ async function main() {
         expect(await open(), "the dialog did not open");
         await page.click("[data-dance-close]");
         expect(!(await open()), "the dialog did not close");
+        await page.close();
+      },
+    );
+
+    await check(
+      "conversations: reached from the landing; one spine open at a time; filters hide others",
+      async () => {
+        const page = await desktop.newPage();
+        watch(page);
+        await page.goto(`${BASE}/`, { waitUntil: "load" });
+        await page.click('.menu a[href="/conversations/"]');
+        await page.waitForURL("**/conversations/");
+        const spines = page.locator(".book summary");
+        await spines.nth(0).click();
+        await spines.nth(1).click();
+        const open = await page.$$eval(".book details[open]", (els) => els.length);
+        expect(open === 1, `${open} spines open at once`);
+        expect(!page.url().includes("kind="), "opening a spine changed the filter");
+        await page.click('[data-filter="films"]');
+        expect(new URL(page.url()).searchParams.get("kind") === "films", "kind not in the URL");
+        const kinds = await page.$$eval(".book:not([hidden])", (els) =>
+          els.map((el) => el.dataset.kind),
+        );
+        expect(kinds.length > 0, "no films shown");
+        expect(
+          kinds.every((k) => k === "films"),
+          `other kinds still shown: ${kinds.join(", ")}`,
+        );
+        await page.reload({ waitUntil: "load" });
+        const pressed = await page.$eval('[data-filter="films"]', (b) => b.ariaPressed);
+        expect(pressed === "true", "?kind=films not applied on load");
         await page.close();
       },
     );

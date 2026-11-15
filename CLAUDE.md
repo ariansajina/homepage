@@ -50,13 +50,14 @@ already there.
 ## Map
 
 - `src/pages/`: one file per route: `index.astro` (landing), `about`, `works/` (+ `[slug]`),
-  `letters/` (+ `[slug]`), `dances`, `404`.
+  `letters/` (+ `[slug]`), `dances`, `conversations`, `404`.
 - `src/layouts/Base.astro`: head/SEO, fonts, `<ClientRouter />` and the two corner decks.
   `Sub.astro` = Base + top bar, for every page but the landing.
 - `src/components/`: `Player.astro` and `NextDeck.astro` (both `transition:persist`),
   `TopBar.astro`.
 - `src/scripts/`: client behaviour as plain TS modules: `player.ts` (decks + audio),
-  `topbar.ts`, `scramble.ts`, `stain.ts`, `landing-video.ts`, `dances.ts`.
+  `topbar.ts`, `scramble.ts`, `stain.ts`, `landing-video.ts`, `dances.ts`,
+  `conversations.ts`.
 - `src/config/landing.yaml`: **all landing tweaks**: menu words, scramble timing,
   background video keys + mask, stain settings. Validated by `src/lib/landing-config.ts`
   (a zod schema); a bad value fails the build with the key's path. So does a stain
@@ -66,7 +67,7 @@ already there.
 - `src/dev/`: the stain tuner, injected at `/dev/stain` by a small integration in
   `astro.config.mjs` only when `command === "dev"`. Never part of the build.
 - `src/content.config.ts`: collections. Works and letters are Markdown in `src/content/`;
-  dances, tracks and upcoming are YAML in `src/data/`.
+  dances, tracks, upcoming and conversations are YAML in `src/data/`.
 - `src/lib/media.ts`: the only place that turns an R2 key into a URL (`PUBLIC_MEDIA_URL`,
   or `/media` in local dev → `public/media/`).
 - `src/lib/content.ts`: sorted works/letters, date formatting. `src/lib/routes.ts`: every

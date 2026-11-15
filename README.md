@@ -7,7 +7,8 @@ Arian Šajina's homepage: a static [Astro](https://astro.build) site, served by 
   (Latin, Cyrillic, Glagolitic), over a looping video revealed by a stain spreading out
   from the island of Vis.
 - **About**, **Works** (a diagonal timeline + one page per work), **Letters** (long-form
-  essays) and **Dances** (a grid of short videos that play full screen).
+  essays), **Dances** (a grid of short videos that play full screen) and **Conversations**
+  (a shelf of books, films, podcasts and pages, filterable by kind).
 - A **music player** and a **"where to find me next"** ticker in the top-right corner. Both
   survive page navigation (Astro's client router + `transition:persist`), so the music keeps
   playing while visitors move around.
@@ -45,6 +46,7 @@ Everything is files in this repo:
 | Works                 | `src/content/works/<slug>.md`: front matter (title, year, date, credits, shows, link) + a one-paragraph description |
 | Letters               | `src/content/letters/<slug>.md`: front matter (title, published, edited?, description, cover?) + Markdown body      |
 | Dances                | `src/data/dances.yaml` (title, length, `video` + `poster` R2 keys; empty video = grey placeholder)                  |
+| Conversations         | `src/data/conversations.yaml` (title, by, kind, note, optional `href` and `pics`; shelf order = file order)         |
 | Music                 | `src/data/tracks.yaml` (play order; `src` = R2 key)                                                                 |
 | Where to find me next | `src/data/upcoming.yaml` (empty list hides the button)                                                              |
 | About                 | `src/pages/about.astro`                                                                                             |
