@@ -1,0 +1,66 @@
+---
+// Works sit on a timeline by their earliest date: newest at the top-left, oldest at the
+// bottom-right, gaps scaled to time. On phones the diagonal flattens to a column.
+import Sub from "../../layouts/Sub.astro";
+import { sortedWorks } from "../../lib/content";
+
+const works = await sortedWorks();
+const t = works.map((w) => w.data.date.getTime());
+const hi = Math.max(...t),
+  lo = Math.min(...t),
+  span = Math.max(1, hi - lo);
+const items = works.map((w, i) => {
+  const f = (hi - t[i]) / span;
+  return {
+    href: `/works/${w.id}/`,
+    title: w.data.title,
+    f: f.toFixed(4),
+    top: (f * 100).toFixed(3),
+  };
+});
+---
+
+<Sub title="Works" description="Dance and performance works by Arian Šajina.">
+  <div class="view top works">
+    <ul class="timeline">
+      {items.map((w) => (
+        <li class="tl-item" style={`top: calc(${w.top}% - 0.6em); --f: ${w.f}`}>
+          <a class="lnk" href={w.href}>
+            {w.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Sub>
+
+<style>
+  .works {
+    padding-bottom: 40px;
+  }
+  .timeline {
+    list-style: none;
+    margin: 2.5vh 0 0;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    height: max(520px, calc(95vh - 200px));
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.2;
+    text-transform: lowercase;
+  }
+  .tl-item {
+    position: absolute;
+    margin: 0;
+    white-space: nowrap;
+    left: calc(var(--f, 0) * 100%);
+    transform: translateX(calc(var(--f, 0) * -100%));
+  }
+  @media (max-width: 600px) {
+    .tl-item {
+      left: 0;
+      transform: none;
+    }
+  }
+</style>

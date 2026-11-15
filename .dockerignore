@@ -1,0 +1,8 @@
+node_modules
+dist
+.astro
+.git
+public/media
+media-src
+.env
+.env.*

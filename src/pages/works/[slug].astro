@@ -1,0 +1,97 @@
+---
+import { render } from "astro:content";
+import Sub from "../../layouts/Sub.astro";
+import { sortedWorks } from "../../lib/content";
+
+export async function getStaticPaths() {
+  return (await sortedWorks()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const w = entry.data;
+const { Content } = await render(entry);
+const description = (entry.body ?? "").trim().slice(0, 160);
+---
+
+<Sub title={w.title} description={description} back="/works/" showHome>
+  <div class="view">
+    <article class="work">
+      <h1>{w.title}</h1>
+      <p class="year">{w.year}</p>
+      <div class="text">
+        <Content />
+      </div>
+      {w.link && (
+        <p class="txt link">
+          <a href={w.link.href} target="_blank" rel="noopener">
+            {w.link.label}
+          </a>
+        </p>
+      )}
+      {w.shows.length > 0 && (
+        <dl class="rows shows">
+          {w.shows.map((r) => (
+            <div>
+              <dt>{r.when}</dt>
+              <dd>{r.where}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+      {w.credits.length > 0 && (
+        <dl class="rows credits">
+          {w.credits.map((r) => (
+            <div>
+              <dt>{r.role}</dt>
+              <dd>{r.name}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </article>
+  </div>
+</Sub>
+
+<style>
+  .work {
+    width: 100%;
+    max-width: 34em;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  h1 {
+    margin: 0;
+    font-size: inherit;
+    font-weight: 400;
+    text-transform: lowercase;
+  }
+  .year {
+    margin: 0 0 1.6em;
+    color: var(--muted);
+  }
+  .text :global(p) {
+    margin: 0;
+  }
+  .link {
+    margin: 0.6em 0 0;
+  }
+  .rows {
+    margin: 1.6em 0 0;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .shows {
+    margin-top: 2.2em;
+  }
+  .rows div {
+    display: grid;
+    grid-template-columns: 7.5em minmax(0, 1fr);
+    column-gap: 1em;
+  }
+  dt {
+    color: var(--muted);
+  }
+  dd {
+    margin: 0;
+  }
+</style>

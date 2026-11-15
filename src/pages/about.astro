@@ -1,0 +1,97 @@
+---
+import Sub from "../layouts/Sub.astro";
+import { media } from "../lib/media";
+
+const photo = media("about/arian.jpg");
+---
+
+<Sub
+  title="About"
+  description="I break and engage with performing arts. A naši speaker from Istria, based in Copenhagen."
+  image={photo}
+  backText="back at last"
+>
+  <div class="view">
+    <div class="about-wrap">
+      <img
+        class="about-img"
+        src={photo}
+        width="675"
+        height="900"
+        alt="Arian Šajina at a restaurant table, with his bag circled in red"
+      />
+      <div class="txt about-text">
+        <p>
+          If I was born a century ago, I’d be a member of the intelligentsia. Two, and I’d be a
+          priest. I think this is what I and someone I admire have in common. Anytime before that,
+          I’d toil the hoe. Today, I toil the keyboard. I’m a naši speaker from Istria, a Balkan
+          émigré, a German immigré, a Yugofuturist(?!), dancer and other based in Copenhagen.
+        </p>
+        <p>
+          I break and engage with performing arts. As a performer, I nurture a lasting creative
+          partnership with choreographer Nika Janković Disney. In 2026, I started developing my own
+          practice centred around 30 rounds. I created and maintain{" "}
+          <a href="http://pleskal.dk">pleskal.dk</a>, an aggregated and crowdsourced public calendar
+          for performance art happenings in Copenhagen.
+        </p>
+        <p>
+          Elsewhere, I develop the end-of-day risk engine at Nordea, and have previously worked on
+          individual-based modelling of life history evolution at the Valenzano lab. I studied
+          Mathematics at University of Bonn and Computer Science at ITU Copenhagen.
+        </p>
+        <p>
+          I am interested in: breaking, dance and choreography, the dance floor as an ‘other’ space
+          in the tradition of David Mancuso, forming bonds that last, speaking of home over
+          transparent drinks, how to live a good life in a society intent on perpetuating harm,
+          islands.
+        </p>
+        <p>If you wish to conspire with me, reach out.</p>
+      </div>
+    </div>
+  </div>
+</Sub>
+
+<style>
+  .about-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 40em;
+  }
+  .about-img {
+    order: 2;
+    flex: 0 0 auto;
+    display: block;
+    width: 300px;
+    max-width: 100%;
+    height: auto;
+  }
+  .about-text {
+    width: 100%;
+    min-width: 0;
+    font-size: clamp(13px, calc(1.6vh + 2px), 17px);
+    line-height: 1.55;
+  }
+  .about-text p {
+    margin: 0 0 1em;
+  }
+  .about-text p:last-child {
+    margin: 0;
+  }
+  @media (max-width: 760px) {
+    .about-wrap {
+      gap: 32px;
+    }
+    .about-img {
+      width: min(100%, 360px);
+    }
+  }
+  @media (max-width: 600px) {
+    .about-text {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+  }
+</style>

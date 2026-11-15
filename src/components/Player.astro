@@ -1,0 +1,128 @@
+---
+// Music player deck. Persisted across navigations (transition:persist), so the <audio>
+// keeps playing while the visitor moves around the site. Behaviour: src/scripts/player.ts.
+import { getCollection } from "astro:content";
+import { media } from "../lib/media";
+
+const tracks = (await getCollection("tracks")).map(({ data }) => ({
+  title: data.title,
+  artist: data.artist,
+  src: media(data.src),
+}));
+const first = tracks[0] ?? { title: "", artist: "", src: "" };
+---
+
+{tracks.length > 0 && (
+  <section
+    class="ap"
+    id="player"
+    aria-label="Music"
+    transition:persist="player"
+    data-tracks={JSON.stringify(tracks)}
+  >
+    <div class="ap-panel" inert>
+      <div class="ap-screen">
+        <p class="ap-title" data-crawl-box>
+          <span class="ap-crawl">
+            <span class="ap-words">
+              <span data-track-title>{first.title}</span>{" "}
+              <span class="ap-artist" data-track-artist>
+                {first.artist}
+              </span>
+            </span>
+            <span class="ap-copy" aria-hidden="true">
+              <span data-track-title>{first.title}</span>{" "}
+              <span class="ap-artist" data-track-artist>
+                {first.artist}
+              </span>
+            </span>
+          </span>
+        </p>
+        <div class="ap-prog">
+          <span class="ap-rail" aria-hidden="true" />
+          <span class="ap-fill" aria-hidden="true" />
+          <span class="ap-dot" aria-hidden="true" />
+          <input type="range" min="0" max="1000" value="0" aria-label="position in the track" />
+        </div>
+      </div>
+      <div class="ap-ctrls">
+        <button type="button" aria-label="previous track" data-prev disabled={tracks.length < 2}>
+          <svg class="ap-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M18 5.5 8.5 12 18 18.5Z M6 5.5v13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <button type="button" aria-label="play" data-toggle>
+          <svg class="ap-ico when-playing" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M8.5 5v14 M15.5 5v14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+          <svg class="ap-ico when-paused" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M7 4.5 19 12 7 19.5Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <button type="button" aria-label="next track" data-next disabled={tracks.length < 2}>
+          <svg class="ap-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M6 5.5 15.5 12 6 18.5Z M18 5.5v13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <button
+      class="ap-tab"
+      type="button"
+      aria-expanded="false"
+      aria-label="show the player"
+      data-tab
+    >
+      <svg class="ap-ico when-open" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M6 6l12 12M18 6 6 18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </svg>
+      <svg class="ap-ico when-closed" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M12 17.5a2.6 2.3 0 1 1-2.6-2.3c1.4 0 2.6 1 2.6 2.3V4c2.6.6 5.6 2 6.4 5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <audio preload="metadata" src={first.src} />
+  </section>
+)}
+
+<script>
+  import "../scripts/player";
+</script>

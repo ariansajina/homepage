@@ -1,0 +1,9 @@
+# Music player tracks, in play order. src = key in the R2 bucket.
+- id: da-smo-se-ranije-sreli
+  title: Da Smo Se Ranije Sreli
+  artist: Branko Mataja
+  src: music/da-smo-se-ranije-sreli.mp3
+- id: tesko-mi-je-zaboravit-tebe
+  title: Teško Mi Je Zaboravit Tebe
+  artist: Branko Mataja
+  src: music/tesko-mi-je-zaboravit-tebe.mp3

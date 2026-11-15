@@ -1,0 +1,22 @@
+---
+import Sub from "../layouts/Sub.astro";
+---
+
+<Sub title="Not found" description="This page does not exist.">
+  <div class="view">
+    <p class="nf">
+      nothing here.{" "}
+      <a class="lnk" href="/">
+        start again
+      </a>
+    </p>
+  </div>
+</Sub>
+
+<style>
+  .nf {
+    margin: 0;
+    font-size: 16px;
+    text-transform: lowercase;
+  }
+</style>

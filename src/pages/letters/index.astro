@@ -1,0 +1,45 @@
+---
+import Sub from "../../layouts/Sub.astro";
+import { sortedLetters } from "../../lib/content";
+
+const letters = await sortedLetters();
+---
+
+<Sub title="Letters" description="Letters and essays by Arian Šajina.">
+  <div class="view top">
+    <ul class="letters">
+      {letters.map((l) => (
+        <li>
+          <a class="lnk" href={`/letters/${l.id}/`}>
+            <span class="year">{l.data.published.getUTCFullYear()}</span>
+            {l.data.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Sub>
+
+<style>
+  .letters {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.5;
+    text-transform: lowercase;
+  }
+  .letters li {
+    margin: 0;
+  }
+  .letters a {
+    display: inline-block;
+    padding: 4px 0;
+  }
+  .year {
+    display: inline-block;
+    width: 3.6em;
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,200 @@
+---
+import { render } from "astro:content";
+import "@fontsource-variable/newsreader/opsz.css";
+import "@fontsource-variable/newsreader/opsz-italic.css";
+import Sub from "../../layouts/Sub.astro";
+import { sortedLetters, longDate } from "../../lib/content";
+import { media } from "../../lib/media";
+
+export async function getStaticPaths() {
+  return (await sortedLetters()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const l = entry.data;
+const { Content } = await render(entry);
+const meta = longDate(l.published) + (l.edited ? `, last edited ${longDate(l.edited)}` : "");
+const cover = l.cover ? { ...l.cover, src: media(l.cover.src) } : undefined;
+---
+
+<Sub
+  title={l.title}
+  description={l.description}
+  image={cover?.type === "image" ? cover.src : undefined}
+  back="/letters/"
+  showHome
+>
+  <div class="view letter-view">
+    <article class="txt letter">
+      <h1>{l.title}</h1>
+      <p class="letter-meta">{meta}</p>
+      {cover && (
+        <figure class="cover wide">
+          {cover.type === "image" ? (
+            <img src={cover.src} alt={cover.alt} />
+          ) : (
+            <video src={cover.src} autoplay muted loop playsinline aria-label={cover.alt} />
+          )}
+          {cover.caption && <figcaption>{cover.caption}</figcaption>}
+        </figure>
+      )}
+      <Content />
+      <p class="letter-top">
+        <a href="#top" data-to-top>
+          back to top ↑
+        </a>
+      </p>
+    </article>
+  </div>
+</Sub>
+
+<style>
+  .letter-view {
+    align-items: flex-start;
+    padding: 120px 24px 160px;
+  }
+  .letter {
+    width: 100%;
+    max-width: 33em;
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--text);
+    font-optical-sizing: auto;
+    hyphens: manual;
+    -webkit-font-smoothing: antialiased;
+  }
+  .letter :global(p) {
+    margin: 0 0 1.05em;
+  }
+  .letter :global(em) {
+    font-style: italic;
+  }
+  .letter :global(a) {
+    text-decoration-color: #9a9a9a;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .letter :global(a:hover) {
+    text-decoration-color: var(--ink);
+  }
+  .letter :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 2.4em 0;
+  }
+  .letter :global(ol) {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #333;
+    padding-left: 1.3em;
+  }
+  .letter :global(ol li) {
+    margin: 0 0 0.8em;
+    padding-left: 0.2em;
+  }
+  .letter :global(blockquote) {
+    margin: 1.6em 0 1.6em 1.4em;
+    padding: 0;
+    font-style: italic;
+  }
+  .letter :global(blockquote p) {
+    margin: 0 0 0.6em;
+  }
+  .letter :global(figure) {
+    margin: 2.2em 0;
+  }
+  .letter :global(figure img),
+  .letter :global(figure video) {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #f4f4f4;
+  }
+  .letter :global(figure.wide) {
+    margin-left: -3.5em;
+    margin-right: -3.5em;
+  }
+  .letter :global(figure.pair) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .letter :global(figure.pair figcaption) {
+    grid-column: 1 / -1;
+  }
+  .letter :global(figcaption) {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--muted);
+    margin-top: 0.6em;
+    font-style: normal;
+  }
+  .letter figure.cover {
+    margin: 0 0 3em;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 34px;
+    line-height: 1.2;
+    font-weight: 400;
+    margin: 0 0 0.5em;
+    letter-spacing: -0.01em;
+  }
+  .letter-meta {
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--muted);
+    margin: 0 0 3em;
+  }
+  .letter .letter-top {
+    margin: 3.2em 0 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .letter .letter-top a {
+    text-decoration: none;
+    color: var(--muted);
+  }
+  .letter .letter-top a:hover {
+    color: var(--ink);
+  }
+  @media (max-width: 760px) {
+    .letter :global(figure.wide) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .letter :global(figure.pair) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 600px) {
+    .letter {
+      font-size: 18px;
+    }
+    h1 {
+      font-size: 28px;
+    }
+    .letter-meta {
+      margin-bottom: 2.2em;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    // Letters link out a lot; external links open in a new tab, as in the design.
+    document.querySelectorAll<HTMLAnchorElement>(".letter a[href^='http']").forEach((a) => {
+      a.target = "_blank";
+      a.rel = "noopener";
+    });
+    document.querySelector("[data-to-top]")?.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+    });
+  });
+</script>

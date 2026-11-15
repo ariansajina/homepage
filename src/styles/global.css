@@ -1,0 +1,88 @@
+/* Site-wide styles, ported from the design ("Landing page – multilingual scramble").
+   Page-specific rules live next to their page/component in <style> blocks. */
+
+:root {
+  --ink: #000000;
+  --text: #111111;
+  --muted: #6b6b6b;
+  --rule: #e6e6e6;
+  --edge: #949292;
+  --placeholder: #ececec;
+  --paper: #ffffff;
+  --sans: "Inter", "Noto Sans Glagolitic", system-ui, sans-serif;
+  --serif: "Newsreader Variable", "Newsreader", Georgia, "Times New Roman", serif;
+  --ease: cubic-bezier(0.3, 0.1, 0.1, 1);
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+}
+
+a {
+  color: var(--ink);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--ink);
+}
+a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+}
+a.lnk:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+.txt a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* A sub page's content area: centred by default, top-left with .top. */
+.view {
+  box-sizing: border-box;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 76px 24px 120px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+}
+.view.top {
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 92px 32px 120px;
+}
+
+@media (max-width: 600px) {
+  .view {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .view.top {
+    padding-top: 76px;
+  }
+}

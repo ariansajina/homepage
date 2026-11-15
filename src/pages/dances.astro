@@ -1,0 +1,206 @@
+---
+// Dances: short videos in a 4-column grid (2 on narrow screens). Opening one plays it
+// full screen (real full screen where the browser allows it, else a window-filling
+// overlay) and pauses the music until it closes. Clips come from src/data/dances.yaml.
+import { getCollection } from "astro:content";
+import Sub from "../layouts/Sub.astro";
+import { media } from "../lib/media";
+
+const dances = (await getCollection("dances")).map(({ id, data }) => ({
+  id,
+  title: data.title,
+  length: data.length,
+  video: media(data.video),
+  poster: media(data.poster),
+}));
+---
+
+<Sub title="Dances" description="Short dance videos by Arian Šajina.">
+  <div class="view top">
+    <ul class="dgrid">
+      {dances.map((d) => (
+        <li class="dcell">
+          <button
+            class="dcard"
+            type="button"
+            aria-label={`play ${d.title}`}
+            data-dance={JSON.stringify(d)}
+          >
+            <span
+              class="dthumb"
+              aria-hidden="true"
+              style={d.poster ? `background-image: url('${d.poster}')` : undefined}
+            />
+          </button>
+          <p class="dcap">
+            <span class="dt">{d.title}</span>
+            <span class="dlen">{d.length}</span>
+          </p>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <dialog class="dov" aria-label="video" data-dance-dialog>
+    <div class="dovbar">
+      <span data-dance-label></span>
+      <button class="dovclose" type="button" data-dance-close>
+        close
+      </button>
+    </div>
+    <video controls playsinline preload="metadata" data-dance-video></video>
+    <div class="dempty" data-dance-empty>
+      [video]
+    </div>
+  </dialog>
+</Sub>
+
+<style>
+  .dgrid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: min(1120px, 100%);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 16px;
+  }
+  .dcell {
+    margin: 0;
+    min-width: 0;
+  }
+  .dcard {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .dcard:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+  .dthumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--placeholder) center / cover no-repeat;
+  }
+  @media (hover: hover) {
+    .dcard:hover .dthumb {
+      filter: brightness(0.92);
+    }
+  }
+  .dcap {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.35;
+    text-transform: lowercase;
+  }
+  .dt {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .dlen {
+    color: var(--muted);
+    flex: 0 0 auto;
+  }
+  .dov {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    z-index: 20;
+    background: #000;
+    outline: none;
+  }
+  .dov[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dov::backdrop {
+    background: #000;
+  }
+  .dov video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+  .dempty {
+    width: min(80vw, 140vh);
+    aspect-ratio: 16 / 9;
+    background: #1a1a1a;
+    color: #9a9a9a;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+  }
+  .dov [hidden] {
+    display: none;
+  }
+  .dovbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: #cfcfcf;
+    text-transform: lowercase;
+    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+    pointer-events: none;
+  }
+  .dovbar > * {
+    pointer-events: auto;
+  }
+  .dovclose {
+    background: none;
+    border: 0;
+    padding: 12px 0 12px 12px;
+    margin: 0;
+    font: inherit;
+    color: #fff;
+    cursor: pointer;
+  }
+  .dovclose:focus-visible {
+    outline: 1px solid #fff;
+    outline-offset: 2px;
+  }
+  @media (max-width: 900px) {
+    .dgrid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 600px) {
+    .dgrid {
+      gap: 22px 12px;
+    }
+    .dcap {
+      font-size: 12px;
+    }
+  }
+</style>
+
+<script>
+  import "../scripts/dances";
+</script>

@@ -1,0 +1,66 @@
+---
+// "Where to find me next" deck, stacked under the music player. Hidden when
+// src/data/upcoming.yaml is empty. Behaviour: src/scripts/player.ts (shared deck logic).
+import { getCollection } from "astro:content";
+
+const items = (await getCollection("upcoming")).map(({ data }) => data);
+---
+
+{items.length > 0 && (
+  <section
+    class="ap ap-next"
+    id="next-deck"
+    aria-label="Where to find me next"
+    transition:persist="next-deck"
+  >
+    <div class="ap-panel" inert>
+      <div class="ap-screen">
+        <p class="ap-title" data-crawl-box>
+          <span class="ap-crawl">
+            <span class="ap-words">
+              {items.map((n) => (
+                <span class="nx-item">
+                  {n.title} <span class="ap-artist">{n.where}</span>
+                </span>
+              ))}
+            </span>
+            <span class="ap-copy" aria-hidden="true">
+              {items.map((n) => (
+                <span class="nx-item">
+                  {n.title} <span class="ap-artist">{n.where}</span>
+                </span>
+              ))}
+            </span>
+          </span>
+        </p>
+      </div>
+    </div>
+    <button
+      class="ap-tab"
+      type="button"
+      aria-expanded="false"
+      aria-label="where to find me next"
+      data-tab
+    >
+      <svg class="ap-ico when-open" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M6 6l12 12M18 6 6 18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </svg>
+      <svg class="ap-ico when-closed" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M7 17 17 7M9 7h8v8"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </section>
+)}

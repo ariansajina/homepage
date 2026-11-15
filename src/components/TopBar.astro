@@ -1,0 +1,75 @@
+---
+// Top bar on every sub page: a "back" link (whose wording changes on every page view)
+// and, one level deeper, a "home" link that goes to a random page.
+// Behaviour: src/scripts/topbar.ts.
+import { allRoutes } from "../lib/routes";
+
+interface Props {
+  back: string;
+  /** Fixed wording for "back" (the about page always says "back at last"). */
+  backText?: string;
+  showHome?: boolean;
+}
+
+const { back, backText, showHome = false } = Astro.props;
+const routes = await allRoutes();
+---
+
+<nav class="topbar" aria-label="Site" data-routes={JSON.stringify(routes)}>
+  <a class="lnk" href={back} data-back={backText ? undefined : ""}>
+    {backText ?? "back"}
+  </a>
+  {showHome && (
+    <a class="lnk" href="/" data-home>
+      home
+    </a>
+  )}
+</nav>
+
+<style>
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 6;
+    box-sizing: border-box;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 32px;
+    background: rgba(255, 255, 255, 0.97);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1;
+    transition:
+      transform 0.28s var(--ease),
+      box-shadow 0.2s;
+  }
+  .topbar a {
+    padding: 14px 0;
+  }
+  :global(html[data-baredge]) .topbar {
+    box-shadow: 0 1px 0 #ececec;
+  }
+  :global(html[data-barhide]) .topbar {
+    transform: translateY(-100%);
+    box-shadow: none;
+  }
+  @media (max-width: 600px) {
+    .topbar {
+      padding: 0 20px;
+      gap: 16px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .topbar {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import "../scripts/topbar";
+</script>
