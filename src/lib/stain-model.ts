@@ -61,7 +61,7 @@ export function seededRandom(seed: number): () => number {
 
 // Pixels at or above this mask opacity count as land; the fainter fringe (down to
 // FRINGE) belongs to the nearest piece but never starts one.
-const LAND = 0.3;
+export const LAND = 0.3;
 const FRINGE = 0.08;
 // Key penalty for every piece other than the origin's: large enough that the origin's
 // piece is completely full before any other piece begins.

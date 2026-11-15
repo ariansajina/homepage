@@ -10,11 +10,15 @@ import "../styles/global.css";
 import "../styles/decks.css";
 import Player from "../components/Player.astro";
 import NextDeck from "../components/NextDeck.astro";
+import { media } from "../lib/media";
 
 interface Props {
   title?: string;
   description?: string;
+  /** Share image (a media URL). Defaults to the portrait from the about page. */
   image?: string;
+  /** Keep the page out of search engines (the 404 page). */
+  noindex?: boolean;
 }
 
 const NAME = "Arian Šajina";
@@ -22,7 +26,14 @@ const {
   title,
   description = "Arian Šajina — dancer, breaker and programmer based in Copenhagen.",
   image,
+  noindex = false,
 } = Astro.props;
+// Link previews: a page's own image is shown large; other pages get the portrait as a
+// small thumbnail. Share images must be absolute URLs.
+const DEFAULT_IMAGE = media("about/arian.jpg");
+const absolute = (url: string) => (Astro.site ? new URL(url, Astro.site).href : url);
+const shareImage = absolute(image || DEFAULT_IMAGE);
+const card = image ? "summary_large_image" : "summary";
 const fullTitle = title ? `${title} · ${NAME}` : NAME;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 ---
@@ -34,13 +45,15 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    {canonical && <link rel="canonical" href={canonical} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    {canonical && !noindex && <link rel="canonical" href={canonical} />}
     <meta property="og:title" content={title ?? NAME} />
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content={NAME} />
     <meta property="og:type" content="website" />
     {canonical && <meta property="og:url" content={canonical} />}
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:image" content={shareImage} />
+    <meta name="twitter:card" content={card} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <ClientRouter fallback="swap" />
   </head>

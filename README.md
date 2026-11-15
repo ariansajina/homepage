@@ -31,6 +31,8 @@ The stain tuner at <http://localhost:4321/dev/stain> exists only on the dev serv
 npm run build        # static site in dist/
 npm run preview      # serve dist/
 npm run check        # type + content-schema check
+npm test             # unit tests for the stain model
+npm run test:smoke   # browser smoke test (needs Playwright + Chromium; see tests/smoke.cjs)
 npm run format       # prettier
 ```
 
@@ -54,6 +56,11 @@ Media fields hold an R2 **key** such as `dances/sprezzatura.mp4`, never a full U
 Inside a letter, media goes in the Markdown as HTML, e.g.
 `<figure class="wide"><img src="https://media.example.com/letters/x.jpg" alt="…"><figcaption>…</figcaption></figure>`
 (`wide` reaches past the text column, `pair` puts two side by side).
+
+A letter's `cover` takes `type` (`image` or `video`), `src` (R2 key), `alt`, and optionally
+`caption`. For an image, also give its pixel `width` and `height`, so the text doesn't
+jump when it loads. An image cover is also the letter's picture in link previews; every
+other page uses `about/arian.jpg`.
 
 ## Media on R2
 

@@ -31,7 +31,7 @@ const cover = l.cover ? { ...l.cover, src: media(l.cover.src) } : undefined;
       {cover && (
         <figure class="cover wide">
           {cover.type === "image" ? (
-            <img src={cover.src} alt={cover.alt} />
+            <img src={cover.src} alt={cover.alt} width={cover.width} height={cover.height} />
           ) : (
             <video src={cover.src} autoplay muted loop playsinline aria-label={cover.alt} />
           )}

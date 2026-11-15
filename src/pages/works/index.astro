@@ -1,6 +1,8 @@
 ---
 // Works sit on a timeline by their earliest date: newest at the top-left, oldest at the
-// bottom-right, gaps scaled to time. On phones the diagonal flattens to a column.
+// bottom-right, gaps scaled to time. On phones the diagonal flattens to a column, so
+// works close in time are pushed apart by at least MIN_GAP of the timeline's height
+// (the CSS height below guarantees that is more than one line of text).
 import Sub from "../../layouts/Sub.astro";
 import { sortedWorks } from "../../lib/content";
 
@@ -9,20 +11,24 @@ const t = works.map((w) => w.data.date.getTime());
 const hi = Math.max(...t),
   lo = Math.min(...t),
   span = Math.max(1, hi - lo);
-const items = works.map((w, i) => {
-  const f = (hi - t[i]) / span;
-  return {
-    href: `/works/${w.id}/`,
-    title: w.data.title,
-    f: f.toFixed(4),
-    top: (f * 100).toFixed(3),
-  };
-});
+const MIN_GAP = 0.05;
+const fs = t.map((ms) => (hi - ms) / span);
+// Vertical positions: time-scaled, each at least MIN_GAP below the one before, then
+// rescaled so the last one still sits at the bottom.
+const tops: number[] = [];
+fs.forEach((f, i) => tops.push(i === 0 ? f : Math.max(f, tops[i - 1] + MIN_GAP)));
+const stretch = Math.max(1, tops[tops.length - 1] ?? 1);
+const items = works.map((w, i) => ({
+  href: `/works/${w.id}/`,
+  title: w.data.title,
+  f: fs[i].toFixed(4),
+  top: ((tops[i] / stretch) * 100).toFixed(3),
+}));
 ---
 
 <Sub title="Works" description="Dance and performance works by Arian Šajina.">
   <div class="view top works">
-    <ul class="timeline">
+    <ul class="timeline" style={`--n: ${items.length}`}>
       {items.map((w) => (
         <li class="tl-item" style={`top: calc(${w.top}% - 0.6em); --f: ${w.f}`}>
           <a class="lnk" href={w.href}>
@@ -44,7 +50,9 @@ const items = works.map((w, i) => {
     padding: 0;
     position: relative;
     width: 100%;
-    height: max(520px, calc(95vh - 200px));
+    /* The last term keeps neighbours a line apart however many works there are:
+       MIN_GAP (5%) of this height is at least 1.3em. */
+    height: max(520px, calc(95vh - 200px), calc(26em + 1.3em * (var(--n, 1) - 1)));
     text-align: left;
     font-size: 16px;
     line-height: 1.2;

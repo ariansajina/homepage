@@ -104,20 +104,39 @@ function initPlayer() {
     deck.querySelectorAll("[data-track-title]").forEach((el) => (el.textContent = t.title));
     deck.querySelectorAll("[data-track-artist]").forEach((el) => (el.textContent = t.artist));
     audio.src = t.src;
+    // Lock screen / media keys: show what is playing.
+    if ("mediaSession" in navigator)
+      navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist });
     showProgress(0);
     measureAll();
     if (autoplay) audio.play().catch(() => {});
   };
 
-  toggleBtn.addEventListener("click", () => {
-    if (audio.paused) audio.play().catch(() => {});
-    else audio.pause();
-  });
-  deck.querySelector("[data-prev]")?.addEventListener("click", () => {
+  const play = () => audio.play().catch(() => {});
+  const prev = () => {
     if (audio.currentTime > 3) audio.currentTime = 0;
     else load(idx - 1, !audio.paused);
+  };
+  const next = () => load(idx + 1, !audio.paused);
+
+  toggleBtn.addEventListener("click", () => {
+    if (audio.paused) play();
+    else audio.pause();
   });
-  deck.querySelector("[data-next]")?.addEventListener("click", () => load(idx + 1, !audio.paused));
+  deck.querySelector("[data-prev]")?.addEventListener("click", prev);
+  deck.querySelector("[data-next]")?.addEventListener("click", next);
+  // The same controls on the lock screen, headphones and media keys.
+  if ("mediaSession" in navigator) {
+    const ms = navigator.mediaSession;
+    const t = tracks[idx];
+    ms.metadata = new MediaMetadata({ title: t.title, artist: t.artist });
+    ms.setActionHandler("play", play);
+    ms.setActionHandler("pause", () => audio.pause());
+    if (tracks.length > 1) {
+      ms.setActionHandler("previoustrack", prev);
+      ms.setActionHandler("nexttrack", next);
+    }
+  }
   range.addEventListener("input", () => {
     const v = Number(range.value) / 1000;
     showProgress(v);
