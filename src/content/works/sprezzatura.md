@@ -16,4 +16,10 @@ shows:
   - { when: Nov 2026, where: "Premiere, Istria" }
 ---
 
-Duo with Ema Janković Bates, choreography by Nika Disney.
+Latest collaboration between Arian and Nika Disney, joined by Ema Janković Bates.
+
+_Sprezzatura_ is an Italian word that refers to the nonchalance impressed by someone who seemingly plays their role with effortless mastery. However, it also implies a tension: putting on such a façade for others might come at a price of denying one's own nature.
+
+Prompted by the way technology mediates interpersonal relationships today, we imagine a hypothetical scenario in which direct human connection is entirely displaced, and ask whether two bodies encountering each other can reinvent sociability.
+
+How does this reinvented sociability look? What new vocabulary emerges? The body is framed as a place of resistance and adaptation to new paradigms of connection. By forgetting familiar social cues and awkwardly relearning closeness, the work offers a somatic critique of how technology shapes our relationships, while simultaneously imagining ways to reconnect.

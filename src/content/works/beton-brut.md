@@ -9,4 +9,8 @@ shows:
   - { when: 11 Jun 2023, where: "URB festival, Helsinki" }
 ---
 
-Hungry Sharks production, choreography by Valentin Alfery. I substituted an injured dancer in a finished piece.
+Hungry Sharks production, choreography by Valentin Alfery. I substituted an injured dancer (Alexander Tesch) on short notice in the finished piece.
+
+In their own words:
+
+> In BÉTON BRUT the dance company Hungry Sharks combines the aesthetics and principles of brutalist architecture with the social aspects and history of breaking. Hungry Sharks bring to light a rich web of contextual similarities between architecture and hip-hop culture, ranging from the social to the material concrete is built with or danced on. In this work the intersection of both worlds becomes the driving force of dance and choreography of a "brutalist body theatre".
