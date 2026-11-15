@@ -11,6 +11,7 @@ export async function allRoutes(): Promise<string[]> {
     "/works/",
     "/letters/",
     "/dances/",
+    "/conversations/",
     ...works.map((w) => `/works/${w.id}/`),
     ...letters.map((l) => `/letters/${l.id}/`),
   ];

@@ -1,0 +1,75 @@
+# Conversations: books, films, podcasts and pages that keep coming up in conversation.
+# Shown in this order (the shelf is curated, not sorted). Each entry:
+#   title, by (author/maker and year, free text), kind (books | films | podcasts | pages),
+#   note (a line or two), href (optional link, shown on the `by` line),
+#   pics (optional; each { src: R2 key, alt }; an empty src shows a grey placeholder).
+- id: chiang
+  title: Stories of Your Life and Others
+  by: Ted Chiang 2002
+  kind: books
+  note: "[a line or two on why this comes up in conversation]"
+- id: plow
+  title: Crooked Plow
+  by: Itamar Vieira Junior 2019
+  kind: books
+  note: "[a line or two on why this comes up in conversation]"
+- id: burmese
+  title: Burmese Days
+  by: George Orwell 1934
+  kind: books
+  note: "[a line or two on why this comes up in conversation]"
+- id: horvat
+  title: "[a book]"
+  by: Srećko Horvat
+  kind: books
+  note: "[a line or two on why this comes up in conversation]"
+- id: dawn
+  title: The Dawn of Everything
+  by: David Graeber, David Wengrow 2021
+  kind: books
+  note: "[a line or two on why this comes up in conversation]"
+  pics:
+    - { src: "", alt: cover }
+- id: disnaeland
+  title: Disnaeland
+  by: Barbican Press
+  kind: books
+  note: "[a line or two on why this comes up in conversation]"
+- id: traumazone
+  title: TraumaZone
+  by: Adam Curtis 2022
+  kind: films
+  note: "[a line or two on why this comes up in conversation]"
+  pics:
+    - { src: "", alt: still }
+    - { src: "", alt: still }
+- id: latcho
+  title: Latcho Drom
+  by: Tony Gatlif 1993
+  kind: films
+  note: "[a line or two on why this comes up in conversation]"
+  pics:
+    - { src: "", alt: still }
+- id: honeyland
+  title: Honeyland
+  by: Tamara Kotevska, Ljubomir Stefanov 2019
+  kind: films
+  note: "[a line or two on why this comes up in conversation]"
+- id: bitnik
+  title: "!Mediengruppe Bitnik"
+  by: bitnik.org
+  href: https://bitnik.org/
+  kind: pages
+  note: "[a line or two on why this comes up in conversation]"
+  pics:
+    - { src: "", alt: screenshot }
+- id: homelandless
+  title: Homelandless
+  by: Saša Savanović 2026, communispress.com
+  kind: pages
+  note: "[a line or two on why this comes up in conversation]"
+- id: wch
+  title: Working Class History
+  by: podcast
+  kind: podcasts
+  note: "[a line or two on why this comes up in conversation]"
