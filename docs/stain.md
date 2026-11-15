@@ -112,22 +112,25 @@ paused.
 
 ## Settings
 
-| Setting        | Default                    | Effect                                                           |
-| -------------- | -------------------------- | ---------------------------------------------------------------- |
-| `delaySeconds` | 9                          | From page load to the first pixel                                |
-| `growSeconds`  | 180                        | From the first pixel to the whole shape, rest included           |
-| `restSeconds`  | 90                         | Pause once Vis is full (must be < `growSeconds`)                 |
-| `origin`       | `{ x: 0.2867, y: 0.6504 }` | Where it is born (Vis), as fractions of the mask                 |
-| `acceleration` | 2.2                        | Curve exponent: 1 = steady, higher = slower start, faster finish |
-| `preludeShare` | 0.4                        | Most of the spreading time the single-pixel prelude may take     |
-| `raggedness`   | 1                          | Noise strength: 0 = smooth front, 2 = very frayed                |
-| `lobes`        | 1                          | Strength of the big bulges: 0 = round, 2 = star-like             |
-| `resolution`   | 533                        | Grid width in pixels: higher = finer grain, slower to plan       |
-| `seed`         | `null`                     | A number = the same shape every visit; `null` = new each visit   |
+| Setting        | Default                    | Effect                                                            |
+| -------------- | -------------------------- | ----------------------------------------------------------------- |
+| `delaySeconds` | 9                          | From page load to the first pixel                                 |
+| `growSeconds`  | 180                        | From the first pixel to the whole shape, rest included            |
+| `restSeconds`  | 90                         | Pause once Vis is full (must be < `growSeconds`)                  |
+| `origin`       | `{ x: 0.2867, y: 0.6504 }` | Where it is born (Vis), as fractions of the mask; must be on land |
+| `acceleration` | 2.2                        | Curve exponent: 1 = steady, higher = slower start, faster finish  |
+| `preludeShare` | 0.4                        | Most of the spreading time the single-pixel prelude may take      |
+| `raggedness`   | 1                          | Noise strength: 0 = smooth front, 2 = very frayed                 |
+| `lobes`        | 1                          | Strength of the big bulges: 0 = round, 2 = star-like              |
+| `resolution`   | 533                        | Grid width in pixels: higher = finer grain, slower to plan        |
+| `seed`         | `null`                     | A number = the same shape every visit; `null` = new each visit    |
 
 The defaults reproduce the design exactly. The design's settings panel had "hop 120 s"
 with a hidden cap at half the grow time, which made the effective rest 90 s. Here the rest
 is set directly.
+
+The build checks that `origin` is on land (mask opacity of at least 0.3 there) and fails
+with a message if it is in the sea, where the stain would clear the invisible sea first.
 
 The internals that are not settings are named constants at the top of
 `src/lib/stain-model.ts`: the land and fringe thresholds, the +50 hop penalty and the

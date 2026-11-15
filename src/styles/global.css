@@ -30,17 +30,16 @@ a {
   color: var(--ink);
   text-decoration: none;
 }
-a:hover {
-  color: var(--ink);
-}
 a:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 6px;
 }
-a.lnk:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1px;
+@media (hover: hover) {
+  a.lnk:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
 }
 .txt a {
   text-decoration: underline;

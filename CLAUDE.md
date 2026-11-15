@@ -22,17 +22,23 @@ npm run build      # static build into dist/ (also validates src/config/landing.
 npm run preview    # serve dist/
 npm run format     # prettier --write .
 npm run lint       # prettier --check .
+npm test           # unit tests for the stain model (tests/*.test.ts, node:test)
+npm run test:smoke # browser smoke test (tests/smoke.cjs; starts its own dev server)
 ```
 
-There is no test suite. Hooks in `.claude/settings.json` take care of the routine work, so
+Hooks in `.claude/settings.json` take care of the routine work, so
 don't spend turns on it:
 
 - **After every Write/Edit**, Prettier formats the file (`.claude/hooks/format-file.sh`).
   When it changes something, you're told: re-read before your next exact-match Edit there.
 - **Before every `git commit`**, `.claude/hooks/pre-commit-check.sh` runs `astro check`,
-  `prettier --check` and `astro build`. It also refuses any media file outside
+  `prettier --check`, `npm test` and `astro build`. It also refuses any media file outside
   `public/media/`. On failure the commit is blocked and you get the last lines of each
   failing check: fix those, then commit again. Don't run the same checks by hand first.
+
+The smoke test is not in the hook (it needs a browser and takes about half a minute):
+run `npm run test:smoke` after touching `src/scripts/`, the layouts or the client-router
+behaviour, and add a check there when you fix a behaviour bug.
 
 For visual changes, use the `run-homepage` skill
 (`node .claude/skills/run-homepage/check.cjs [routes]`): screenshots at desktop and
@@ -53,7 +59,8 @@ already there.
   `topbar.ts`, `scramble.ts`, `stain.ts`, `landing-video.ts`, `dances.ts`.
 - `src/config/landing.yaml`: **all landing tweaks**: menu words, scramble timing,
   background video keys + mask, stain settings. Validated by `src/lib/landing-config.ts`
-  (a zod schema); a bad value fails the build with the key's path.
+  (a zod schema); a bad value fails the build with the key's path. So does a stain
+  origin that is not on land in the mask.
 - `src/lib/stain-model.ts`: the stain model (pure; shared by the landing page and the
   preview). Documented in docs/stain.md. Keep that doc in step with the code.
 - `src/dev/`: the stain tuner, injected at `/dev/stain` by a small integration in
@@ -65,6 +72,8 @@ already there.
 - `src/lib/content.ts`: sorted works/letters, date formatting. `src/lib/routes.ts`: every
   route (used by the top bar's random "home").
 - `public/landing/coast-mask.png`: the coastline mask (committed; see below).
+- `tests/`: `stain-model.test.ts` (unit tests, `npm test`) and `smoke.cjs` (browser
+  smoke test, `npm run test:smoke`).
 - `scripts/encode-media.sh`, `scripts/upload-media.sh`: the media pipeline. Run locally,
   never in the build.
 - `Dockerfile`, `Caddyfile`, `railway.json`: deployment.

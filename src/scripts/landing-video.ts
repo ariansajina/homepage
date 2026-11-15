@@ -20,7 +20,15 @@ function keepPlaying(video: HTMLVideoElement) {
   video.addEventListener("ended", nudge);
   video.addEventListener("pause", nudge);
   const watchdog = window.setInterval(nudge, 2000);
-  return () => window.clearInterval(watchdog);
+  // Detach everything on the way out: removing a <video> from the page pauses it, and a
+  // "pause" listener left behind would start it again, playing unseen for the rest of
+  // the tab's life.
+  return () => {
+    window.clearInterval(watchdog);
+    video.removeEventListener("ended", nudge);
+    video.removeEventListener("pause", nudge);
+    video.pause();
+  };
 }
 
 document.addEventListener("astro:page-load", () => {

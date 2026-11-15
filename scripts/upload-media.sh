@@ -15,4 +15,5 @@ src="$(dirname "$0")/../public/media"
 AWS_DEFAULT_REGION=auto aws s3 sync "$src" "s3://$R2_BUCKET" \
   --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" \
   --exclude ".*" \
+  --exclude "README.md" \
   --cache-control "public, max-age=31536000"

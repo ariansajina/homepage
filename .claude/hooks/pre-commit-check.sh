@@ -29,7 +29,7 @@ if [ -n "$media" ]; then
   exit 2
 fi
 
-# 2. Checks. astro check and prettier run in parallel; the build runs after
+# 2. Checks. astro check, prettier and the unit tests run in parallel; the build runs after
 #    (it and astro check both regenerate .astro/, so they must not overlap).
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
@@ -40,6 +40,7 @@ run() {
 }
 run "astro check" "$tmp/1-check" node_modules/.bin/astro check &
 run "prettier --check" "$tmp/2-prettier" node_modules/.bin/prettier --check . &
+run "npm test" "$tmp/4-test" npm test --silent &
 wait
 run "astro build" "$tmp/3-build" node_modules/.bin/astro build
 

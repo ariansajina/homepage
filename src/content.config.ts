@@ -30,6 +30,9 @@ const letters = defineCollection({
         type: z.enum(["image", "video"]),
         src: z.string(),
         alt: z.string(),
+        // Intrinsic pixel size of an image cover: reserves its space while it loads.
+        width: z.number().int().positive().optional(),
+        height: z.number().int().positive().optional(),
         caption: z.string().optional(),
       })
       .optional(),

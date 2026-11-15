@@ -49,15 +49,17 @@ function start(canvas: HTMLCanvasElement) {
   const grow = () => {
     if (!plan) return;
     const n = clearedAt(plan, (performance.now() - t0) / 1000 - cfg.delaySeconds, cfg);
+    if (n >= plan.order.length) {
+      // Finished (also when coming back to the landing page later): drop the cover.
+      window.clearInterval(timer);
+      canvas.style.display = "none";
+      return;
+    }
     for (let q = done; q < n; q++) {
       const i = plan.order[q];
       ctx.clearRect(i % W, Math.floor(i / W), 1, 1);
     }
     done = Math.max(done, n);
-    if (n >= plan.order.length) {
-      window.clearInterval(timer);
-      canvas.style.display = "none";
-    }
   };
   let alive = true;
   planning.then((p) => {

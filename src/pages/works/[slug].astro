@@ -10,7 +10,8 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const w = entry.data;
 const { Content } = await render(entry);
-const description = (entry.body ?? "").trim().slice(0, 160);
+// Falls back to the site's default description when the work has no text.
+const description = (entry.body ?? "").replace(/\s+/g, " ").trim().slice(0, 160) || undefined;
 ---
 
 <Sub title={w.title} description={description} back="/works/" showHome>

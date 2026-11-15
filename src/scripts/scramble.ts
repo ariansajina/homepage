@@ -15,8 +15,9 @@ function start(menu: HTMLElement) {
   const PAUSE_MS = timing.pauseSeconds * 1000;
   const HOLD_MS = timing.holdSeconds * 1000;
   const SCRAMBLE_MS = timing.scrambleMs;
-  const links = [...menu.querySelectorAll<HTMLAnchorElement>("a")];
-  const spans = links.map((a) => a.querySelector("span")!);
+  // Only the visible text changes. Each link keeps its resting word as its accessible
+  // name (aria-label, set in index.astro), so screen readers get a stable menu.
+  const spans = [...menu.querySelectorAll<HTMLElement>("a > span")];
   const texts = words.map((w) => [...w[0]]);
   const jobs: (Job | null)[] = words.map(() => null);
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -43,7 +44,6 @@ function start(menu: HTMLElement) {
 
   const goTo = (i: number, lang: number) => {
     const target = [...words[i][lang]];
-    links[i].setAttribute("aria-label", words[i][lang]);
     if (reduced) {
       texts[i] = target;
       spans[i].textContent = target.join("");
