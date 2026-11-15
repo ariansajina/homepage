@@ -1,0 +1,233 @@
+---
+// Dev-only stain tuner, served at /dev/stain by `npm run dev` (never built).
+// Scrub through the stain's life, change its settings live, click the picture to move
+// the origin, then copy the YAML into src/config/landing.yaml.
+import "@fontsource/inter/400.css";
+import "../styles/global.css";
+import { landing, maskSize } from "../lib/landing-config";
+import { media } from "../lib/media";
+
+const { video, mask } = landing.background;
+const settings = { stain: landing.stain, mask, maskSize };
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stain preview</title>
+  </head>
+  <body>
+    <main class="wrap" data-preview={JSON.stringify(settings)}>
+      <section class="stage">
+        <div
+          class="frame ghost"
+          style={`--mask: url('${mask}'); --aspect: ${maskSize.width} / ${maskSize.height}`}
+        >
+          <video autoplay muted loop playsinline>
+            {video.webm && <source src={media(video.webm)} type="video/webm" />}
+            {video.mp4 && <source src={media(video.mp4)} type="video/mp4" />}
+          </video>
+          <canvas data-cover></canvas>
+          <span class="origin" data-origin></span>
+        </div>
+        <p class="hint">
+          Click the picture to move the origin.
+          <label>
+            <input type="checkbox" checked data-ghost /> show the covered area faintly
+          </label>
+        </p>
+      </section>
+
+      <form class="panel" data-form>
+        <h1>Stain preview</h1>
+        <p class="status">
+          <output data-status>…</output>
+        </p>
+        <input type="range" min="0" step="0.1" value="0" data-time aria-label="time" />
+        <div class="row">
+          <button type="button" data-play>
+            play
+          </button>
+          <button type="button" data-restart>
+            restart
+          </button>
+          <label>
+            speed
+            <select data-speed>
+              <option value="1">1×</option>
+              <option value="10" selected>
+                10×
+              </option>
+              <option value="60">60×</option>
+            </select>
+          </label>
+        </div>
+
+        <fieldset>
+          <legend>Timing</legend>
+          <label>
+            delaySeconds <input type="number" step="0.5" min="0" name="delaySeconds" />
+          </label>
+          <label>
+            growSeconds <input type="number" step="5" min="1" name="growSeconds" />
+          </label>
+          <label>
+            restSeconds <input type="number" step="5" min="0" name="restSeconds" />
+          </label>
+          <label>
+            acceleration <input type="number" step="0.1" min="0.1" name="acceleration" />
+          </label>
+          <label>
+            preludeShare <input type="number" step="0.05" min="0" max="1" name="preludeShare" />
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Shape</legend>
+          <label>
+            origin.x <input type="number" step="0.001" min="0" max="1" name="origin.x" />
+          </label>
+          <label>
+            origin.y <input type="number" step="0.001" min="0" max="1" name="origin.y" />
+          </label>
+          <label>
+            raggedness <input type="number" step="0.1" min="0" name="raggedness" />
+          </label>
+          <label>
+            lobes <input type="number" step="0.1" min="0" name="lobes" />
+          </label>
+          <label>
+            resolution <input type="number" step="1" min="50" max="2000" name="resolution" />
+          </label>
+          <label>
+            seed <input type="number" step="1" name="seed" placeholder="random" />
+          </label>
+          <button type="button" data-reseed>
+            new shape
+          </button>
+        </fieldset>
+
+        <label class="yaml">
+          For src/config/landing.yaml
+          <textarea rows="13" readonly data-yaml></textarea>
+        </label>
+      </form>
+    </main>
+
+    <style>
+      body {
+        font-family: var(--sans);
+        font-size: 14px;
+      }
+      .wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 22rem;
+        gap: 32px;
+        padding: 24px;
+        align-items: start;
+      }
+      .frame {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        aspect-ratio: var(--aspect);
+        cursor: crosshair;
+      }
+      .frame video,
+      .frame canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        image-rendering: pixelated;
+      }
+      .frame video {
+        object-fit: cover;
+        object-position: 50% 40%;
+        mix-blend-mode: multiply;
+        mask-image: var(--mask);
+        -webkit-mask-image: var(--mask);
+        mask-size: 100% 100%;
+        -webkit-mask-size: 100% 100%;
+        background: #ddd;
+      }
+      .frame canvas {
+        outline: 1px dashed #ccc;
+      }
+      .frame.ghost canvas {
+        opacity: 0.85;
+      }
+      .origin {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        margin: -6px 0 0 -6px;
+        border: 1px solid #d00;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .hint {
+        color: var(--muted);
+      }
+      .panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 400;
+      }
+      .status {
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      fieldset {
+        border: 1px solid var(--rule);
+        display: grid;
+        gap: 6px;
+      }
+      fieldset label {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      fieldset input {
+        width: 7rem;
+      }
+      button,
+      select,
+      input {
+        font: inherit;
+        min-height: 32px;
+      }
+      .yaml {
+        display: grid;
+        gap: 4px;
+        color: var(--muted);
+      }
+      textarea {
+        font:
+          12px/1.4 ui-monospace,
+          monospace;
+      }
+      @media (max-width: 900px) {
+        .wrap {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+
+    <script>
+      import "./stain-preview";
+    </script>
+  </body>
+</html>

@@ -6,10 +6,22 @@ import sitemap from "@astrojs/sitemap";
 // SITE_URL is the canonical origin; the sitemap is only generated when it is set.
 const site = process.env.SITE_URL || undefined;
 
+// Dev-only pages (never part of the build): the stain tuner at /dev/stain.
+/** @type {import("astro").AstroIntegration} */
+const devPages = {
+  name: "dev-pages",
+  hooks: {
+    "astro:config:setup": ({ command, injectRoute }) => {
+      if (command === "dev")
+        injectRoute({ pattern: "/dev/stain", entrypoint: "./src/dev/stain-preview.astro" });
+    },
+  },
+};
+
 export default defineConfig({
   site,
   output: "static",
   trailingSlash: "ignore",
   build: { format: "directory" },
-  integrations: site ? [sitemap()] : [],
+  integrations: [devPages, ...(site ? [sitemap()] : [])],
 });

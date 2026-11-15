@@ -19,8 +19,13 @@ npm install
 npm run dev          # http://localhost:4321
 ```
 
-Media is read from `public/media/` when `PUBLIC_MEDIA_URL` is unset. That folder is
-gitignored; it mirrors the R2 bucket (see below).
+Media is read from `public/media/` when `PUBLIC_MEDIA_URL` is unset. That folder mirrors
+the R2 bucket, and everything in it except its README is gitignored, so media is never
+committed. Unzip the media bundle into it (or use `scripts/encode-media.sh`) to see the
+video, photo and music locally. To use the real bucket instead:
+`PUBLIC_MEDIA_URL=https://media.<your-domain> npm run dev`.
+
+The stain tuner at <http://localhost:4321/dev/stain> exists only on the dev server.
 
 ```bash
 npm run build        # static site in dist/
@@ -80,8 +85,9 @@ music/da-smo-se-ranije-sreli.mp3
 music/tesko-mi-je-zaboravit-tebe.mp3
 ```
 
-The stain's mask (`public/stain-mask.png`) stays in the repo: the stain reads its pixels,
-which requires the same origin.
+The coastline mask (`public/landing/coast-mask.png`) stays in the repo: it is applied to
+the video at runtime, and the stain reads its pixels, which requires the same origin. How
+the stain works and how to tune it: [docs/stain.md](docs/stain.md).
 
 ### One-time R2 setup
 

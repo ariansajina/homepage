@@ -1,24 +1,28 @@
 ---
-// Landing page: four menu words that scramble between English, German, Italian and
-// Croatian (Latin, Cyrillic, Glagolitic), over a background video revealed by a slowly
-// spreading stain that starts on the island of Vis.
-// Behaviour: src/scripts/scramble.ts, src/scripts/background.ts.
+// Landing page: menu words that scramble between English, German, Italian and Croatian
+// (Latin, Cyrillic, Glagolitic), over a background video revealed by a slowly spreading
+// stain that starts on the island of Vis. Everything tweakable lives in
+// src/config/landing.yaml. Behaviour: src/scripts/{scramble,stain,landing-video}.ts.
 import Base from "../layouts/Base.astro";
 import { media } from "../lib/media";
+import { landing, maskSize } from "../lib/landing-config";
 
-// Order: English, German, Italian, Croatian (Latin), Croatian (Cyrillic), Croatian (Glagolitic)
-const entries = [
-  { href: "/about/", words: ["About", "Über mich", "Chi sono", "O meni", "О мени", "Ⱁ ⰿⰵⱀⰻ"] },
-  { href: "/works/", words: ["Works", "Werke", "Lavori", "Radovi", "Радови", "Ⱃⰰⰴⱁⰲⰻ"] },
-  { href: "/letters/", words: ["Letters", "Briefe", "Lettere", "Pisma", "Писма", "Ⱂⰻⱄⰿⰰ"] },
-  { href: "/dances/", words: ["Dances", "Tänze", "Danze", "Plesovi", "Плесови", "Ⱂⰾⰵⱄⱁⰲⰻ"] },
-].map((e) => ({ ...e, words: e.words.map((w) => w.toLowerCase()) }));
-
-const video = { webm: media("landing/background.webm"), mp4: media("landing/background.mp4") };
+const entries = landing.menu.map((e) => ({
+  href: e.href,
+  words: e.words.map((w) => w.toLowerCase()),
+}));
+const scramble = { words: entries.map((e) => e.words), timing: landing.scramble };
+const { video, mask } = landing.background;
+// The stain grid follows the mask's aspect ratio.
+const grid = {
+  width: landing.stain.resolution,
+  height: Math.round((landing.stain.resolution * maskSize.height) / maskSize.width),
+};
+const frameStyle = `--mask: url('${mask}'); --aspect: ${maskSize.width} / ${maskSize.height}`;
 ---
 
 <Base>
-  <main class="landing">
+  <main class="landing" style={frameStyle}>
     <video
       class="bgv"
       autoplay
@@ -30,11 +34,18 @@ const video = { webm: media("landing/background.webm"), mp4: media("landing/back
       tabindex="-1"
       data-bg-video
     >
-      <source src={video.webm} type="video/webm" />
-      <source src={video.mp4} type="video/mp4" />
+      {video.webm && <source src={media(video.webm)} type="video/webm" />}
+      {video.mp4 && <source src={media(video.mp4)} type="video/mp4" />}
     </video>
-    <canvas class="bgc" width="533" height="461" aria-hidden="true" data-stain></canvas>
-    <ul class="menu" data-scramble={JSON.stringify(entries.map((e) => e.words))}>
+    <canvas
+      class="bgc"
+      width={grid.width}
+      height={grid.height}
+      aria-hidden="true"
+      data-stain={JSON.stringify(landing.stain)}
+      data-mask={mask}
+    ></canvas>
+    <ul class="menu" data-scramble={JSON.stringify(scramble)}>
       {entries.map((e) => (
         <li>
           <a href={e.href} aria-label={e.words[0]}>
@@ -70,7 +81,7 @@ const video = { webm: media("landing/background.webm"), mp4: media("landing/back
     transform: translateY(-50%);
     width: 37%;
     height: auto;
-    aspect-ratio: 1490 / 1290;
+    aspect-ratio: var(--aspect);
     display: block;
     pointer-events: none;
     z-index: 0;
@@ -80,8 +91,8 @@ const video = { webm: media("landing/background.webm"), mp4: media("landing/back
     object-fit: cover;
     object-position: 50% 40%;
     mix-blend-mode: multiply;
-    -webkit-mask-image: url(/stain-mask.png);
-    mask-image: url(/stain-mask.png);
+    -webkit-mask-image: var(--mask);
+    mask-image: var(--mask);
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
@@ -133,5 +144,6 @@ const video = { webm: media("landing/background.webm"), mp4: media("landing/back
 
 <script>
   import "../scripts/scramble";
-  import "../scripts/background";
+  import "../scripts/stain";
+  import "../scripts/landing-video";
 </script>

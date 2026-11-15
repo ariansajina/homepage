@@ -1,0 +1,55 @@
+# Landing page settings. Edit, save, and the dev server reloads.
+# `npm run check` / `npm run build` validate this file and name any bad value.
+# Tune the stain visually with the preview at http://localhost:4321/dev/stain (dev only).
+
+# ---- Menu --------------------------------------------------------------------
+# Each item's words, in this order: English, German, Italian, Croatian (Latin),
+# Croatian (Cyrillic), Croatian (Glagolitic). The first word is the resting one;
+# the others take turns, one per visit to that item. Words are shown lowercase.
+menu:
+  - href: /about/
+    words: [About, Über mich, Chi sono, O meni, О мени, Ⱁ ⰿⰵⱀⰻ]
+  - href: /works/
+    words: [Works, Werke, Lavori, Radovi, Радови, Ⱃⰰⰴⱁⰲⰻ]
+  - href: /letters/
+    words: [Letters, Briefe, Lettere, Pisma, Писма, Ⱂⰻⱄⰿⰰ]
+  - href: /dances/
+    words: [Dances, Tänze, Danze, Plesovi, Плесови, Ⱂⰾⰵⱄⱁⰲⰻ]
+
+# ---- Text scramble -----------------------------------------------------------
+# One item at a time: resting word -> scramble -> foreign word (held) -> scramble
+# -> resting word, then a pause before the next item (random order, every item
+# gets a turn before any repeats).
+scramble:
+  pauseSeconds: 3 # between one item settling and the next one starting
+  holdSeconds: 4 # how long the foreign word stays
+  scrambleMs: 800 # how long one scramble takes
+  # Random letters shown while a word scrambles.
+  letters: "abcdefghilmnoprstuvzčšžабвгдежзиклмнопрстуфхцчшњљⰰⰱⰲⰳⰴⰵⰶⰸⰹⰻⰼⰽⰾⰿⱀⱁⱂⱃⱄⱅⱆⱇⱈⱌⱍⱎ"
+
+# ---- Background --------------------------------------------------------------
+background:
+  # Keys in the R2 bucket (served from public/media/ in local dev).
+  video:
+    webm: landing/background.webm
+    mp4: landing/background.mp4
+  # The coastline mask, applied to the video at runtime: white/opaque shows the video,
+  # transparent hides it. Lives in public/ (same origin) because the stain reads its
+  # pixels. Swapping the video keeps this mask; its aspect ratio sets the frame's.
+  mask: /landing/coast-mask.png
+
+# ---- Stain -------------------------------------------------------------------
+# A white cover over the masked video, cleared pixel by pixel. It is born on Vis,
+# fills the island, rests, hops to the mainland and the other islands, and
+# accelerates until the whole shape shows. How it works: docs/stain.md.
+stain:
+  delaySeconds: 9 # from page load to the first pixel
+  growSeconds: 180 # from the first pixel to the whole shape, including the rest
+  restSeconds: 90 # pause once Vis is full, before the stain hops on (< growSeconds)
+  origin: { x: 0.2867, y: 0.6504 } # where it is born (Vis), as fractions of the mask
+  acceleration: 2.2 # spread curve: 1 = steady, higher = slower start, faster finish
+  preludeShare: 0.4 # at most this share of the spreading time goes to the first single pixels
+  raggedness: 1 # how frayed the front is (0 = smooth)
+  lobes: 1 # how strong the big bulges of the outline are (0 = none)
+  resolution: 533 # stain grid width in pixels; height follows the mask. Higher = finer grain, slower to compute
+  seed: null # a number = the same shape on every visit; null = a new shape every visit

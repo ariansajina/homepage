@@ -8,7 +8,8 @@ dist/
 .astro/
 
 # Local media for dev only. Production media lives on Cloudflare R2.
-public/media/
+public/media/*
+!public/media/README.md
 media-src/
 
 # Environment & secrets

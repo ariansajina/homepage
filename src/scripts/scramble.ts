@@ -1,27 +1,26 @@
-// Landing menu: one item at a time goes English -> a foreign language -> back to English,
+// Landing menu: one item at a time goes from its resting word to a foreign one and back,
 // letters scrambling through a mixed Latin/Cyrillic/Glagolitic pool on the way, then a
-// pause, then the next item. Foreign languages rotate (German, Italian, Croatian Latin,
-// Cyrillic, Glagolitic) so every item shows all of them over time.
+// pause, then the next item. The foreign languages rotate so every item shows all of
+// them over time. Words and timings come from src/config/landing.yaml (via data-scramble).
+import type { LandingConfig } from "../lib/landing-config";
 
-const PAUSE_MS = 3000; // between items
-const HOLD_MS = 4000; // how long a foreign word stays
-const SCRAMBLE_MS = 800; // one scramble
-
-const POOL =
-  "abcdefghilmnoprstuvzčšž" + "абвгдежзиклмнопрстуфхцчшњљ" + "ⰰⰱⰲⰳⰴⰵⰶⰸⰹⰻⰼⰽⰾⰿⱀⱁⱂⱃⱄⱅⱆⱇⱈⱌⱍⱎ";
+type Settings = { words: string[][]; timing: LandingConfig["scramble"] };
 
 type Job = { target: string[]; resolve: number[]; end: number };
 
 let stop: (() => void) | null = null;
 
 function start(menu: HTMLElement) {
-  const words: string[][] = JSON.parse(menu.dataset.scramble || "[]");
+  const { words, timing }: Settings = JSON.parse(menu.dataset.scramble || "{}");
+  const PAUSE_MS = timing.pauseSeconds * 1000;
+  const HOLD_MS = timing.holdSeconds * 1000;
+  const SCRAMBLE_MS = timing.scrambleMs;
   const links = [...menu.querySelectorAll<HTMLAnchorElement>("a")];
   const spans = links.map((a) => a.querySelector("span")!);
   const texts = words.map((w) => [...w[0]]);
   const jobs: (Job | null)[] = words.map(() => null);
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const pool = [...POOL];
+  const pool = [...timing.letters];
   let bag: number[] = [];
   let last = -1;
   let turn = 0;
@@ -86,7 +85,7 @@ function start(menu: HTMLElement) {
   const arm = () => {
     cycle = window.setTimeout(() => {
       const i = nextItem();
-      const lang = 1 + (turn % 5);
+      const lang = 1 + (turn % (words[i].length - 1));
       turn += 1;
       const anim = SCRAMBLE_MS + 150;
       goTo(i, lang);
@@ -115,5 +114,3 @@ document.addEventListener("astro:before-swap", () => {
   stop?.();
   stop = null;
 });
-
-export {};
