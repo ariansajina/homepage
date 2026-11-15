@@ -75,8 +75,10 @@ const cover = l.cover ? { ...l.cover, src: media(l.cover.src) } : undefined;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
   }
-  .letter :global(a:hover) {
-    text-decoration-color: var(--ink);
+  @media (hover: hover) {
+    .letter :global(a:hover) {
+      text-decoration-color: var(--ink);
+    }
   }
   .letter :global(hr) {
     border: 0;
@@ -159,8 +161,10 @@ const cover = l.cover ? { ...l.cover, src: media(l.cover.src) } : undefined;
     text-decoration: none;
     color: var(--muted);
   }
-  .letter .letter-top a:hover {
-    color: var(--ink);
+  @media (hover: hover) {
+    .letter .letter-top a:hover {
+      color: var(--ink);
+    }
   }
   @media (max-width: 760px) {
     .letter :global(figure.wide) {

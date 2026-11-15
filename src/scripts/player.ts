@@ -40,6 +40,7 @@ function measureCrawl(box: HTMLElement | null) {
   const w = words.offsetWidth;
   if (w <= 0) {
     box.removeAttribute("data-crawl");
+    delete box.dataset.k;
     return;
   }
   const d = Math.round(w + gap);

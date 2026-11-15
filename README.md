@@ -46,7 +46,7 @@ Everything is files in this repo:
 | Music                 | `src/data/tracks.yaml` (play order; `src` = R2 key)                                                                 |
 | Where to find me next | `src/data/upcoming.yaml` (empty list hides the button)                                                              |
 | About                 | `src/pages/about.astro`                                                                                             |
-| Landing words         | `src/pages/index.astro`                                                                                             |
+| Landing words         | `src/config/landing.yaml`                                                                                           |
 
 Media fields hold an R2 **key** such as `dances/sprezzatura.mp4`, never a full URL;
 `src/lib/media.ts` turns it into a URL.
