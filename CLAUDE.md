@@ -24,8 +24,22 @@ npm run format     # prettier --write .
 npm run lint       # prettier --check .
 ```
 
-Before committing, run `npm run format`, `npm run check` and `npm run build`. There is no
-test suite. For visual changes, check desktop (1440 px) and phone (390 px) in a browser.
+There is no test suite. Hooks in `.claude/settings.json` take care of the routine work, so
+don't spend turns on it:
+
+- **After every Write/Edit**, Prettier formats the file (`.claude/hooks/format-file.sh`).
+  When it changes something, you're told: re-read before your next exact-match Edit there.
+- **Before every `git commit`**, `.claude/hooks/pre-commit-check.sh` runs `astro check`,
+  `prettier --check` and `astro build`. It also refuses any media file outside
+  `public/media/`. On failure the commit is blocked and you get the last lines of each
+  failing check: fix those, then commit again. Don't run the same checks by hand first.
+
+For visual changes, use the `run-homepage` skill
+(`node .claude/skills/run-homepage/check.cjs [routes]`): screenshots at desktop and
+phone sizes plus an error report in one command. Read only the screenshots you need.
+
+Cloud sessions run `npm ci` in the environment's setup script, so `node_modules` is
+already there.
 
 ## Map
 
@@ -54,6 +68,7 @@ test suite. For visual changes, check desktop (1440 px) and phone (390 px) in a 
 - `scripts/encode-media.sh`, `scripts/upload-media.sh`: the media pipeline. Run locally,
   never in the build.
 - `Dockerfile`, `Caddyfile`, `railway.json`: deployment.
+- `.claude/`: Claude Code hooks (`settings.json`, `hooks/`) and the `run-homepage` skill.
 
 ## Conventions
 
