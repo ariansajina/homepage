@@ -12,6 +12,11 @@ import { getCollection } from "astro:content";
 import Sub from "../layouts/Sub.astro";
 import { media } from "../lib/media";
 import { conversationKinds } from "../content.config";
+import { features } from "../lib/features";
+
+// Behind FEATURE_TRACES (src/lib/features.ts): while it is off, the URL sends
+// visitors to the landing page.
+if (!features.traces) return Astro.redirect("/");
 
 const PAGE_SIZE = 40;
 

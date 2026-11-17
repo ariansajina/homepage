@@ -7,6 +7,7 @@ import { parse } from "yaml";
 import { z } from "astro/zod";
 import raw from "../config/landing.yaml?raw";
 import { LAND } from "./stain-model";
+import { FEATURE_NAMES } from "./features";
 
 const positive = z.number().positive();
 const fraction = z.number().min(0).max(1);
@@ -16,6 +17,8 @@ const schema = z.object({
     .array(
       z.object({
         href: z.string().startsWith("/"),
+        // Optional: the item is shown only while this feature flag is on.
+        feature: z.enum(FEATURE_NAMES as [string, ...string[]]).optional(),
         words: z.array(z.string().min(1)).min(2),
       }),
     )
@@ -28,6 +31,7 @@ const schema = z.object({
   }),
   background: z.object({
     video: z.object({ webm: z.string().optional(), mp4: z.string().optional() }),
+    position: z.string().default("50% 40%"),
     mask: z.string().startsWith("/"),
   }),
   stain: z

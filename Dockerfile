@@ -9,6 +9,8 @@ COPY . .
 # Public base URL of the R2 bucket and the canonical site URL (Railway service variables).
 ARG PUBLIC_MEDIA_URL
 ARG SITE_URL
+# Feature flags (see src/lib/features.ts): unset or "false" keeps a feature off.
+ARG FEATURE_TRACES
 RUN test -n "$PUBLIC_MEDIA_URL" || (echo "PUBLIC_MEDIA_URL must be set" && exit 1)
 RUN npm run build
 

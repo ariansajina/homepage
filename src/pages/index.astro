@@ -6,11 +6,15 @@
 import Base from "../layouts/Base.astro";
 import { media } from "../lib/media";
 import { landing, maskSize } from "../lib/landing-config";
+import { features, type FeatureName } from "../lib/features";
 
-const entries = landing.menu.map((e) => ({
-  href: e.href,
-  words: e.words.map((w) => w.toLowerCase()),
-}));
+// Menu items with a `feature` are left out while that flag is off.
+const entries = landing.menu
+  .filter((e) => !e.feature || features[e.feature as FeatureName])
+  .map((e) => ({
+    href: e.href,
+    words: e.words.map((w) => w.toLowerCase()),
+  }));
 const scramble = { words: entries.map((e) => e.words), timing: landing.scramble };
 const { video, mask } = landing.background;
 // The stain grid follows the mask's aspect ratio.
@@ -18,7 +22,7 @@ const grid = {
   width: landing.stain.resolution,
   height: Math.round((landing.stain.resolution * maskSize.height) / maskSize.width),
 };
-const frameStyle = `--mask: url('${mask}'); --aspect: ${maskSize.width} / ${maskSize.height}`;
+const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.position}; --aspect: ${maskSize.width} / ${maskSize.height}`;
 ---
 
 <Base>
@@ -89,7 +93,7 @@ const frameStyle = `--mask: url('${mask}'); --aspect: ${maskSize.width} / ${mask
   }
   .bgv {
     object-fit: cover;
-    object-position: 50% 40%;
+    object-position: var(--video-pos, 50% 40%);
     mix-blend-mode: multiply;
     -webkit-mask-image: var(--mask);
     mask-image: var(--mask);

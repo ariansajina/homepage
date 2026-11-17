@@ -16,6 +16,7 @@ menu:
   - href: /dances/
     words: [Dances, Tänze, Danze, Plesovi, Плесови, Ⱂⰾⰵⱄⱁⰲⰻ]
   - href: /conversations/
+    feature: traces # hidden unless FEATURE_TRACES is true (src/lib/features.ts)
     words: [Traces, Spuren, Tracce, Tragovi, Трагови, Ⱅⱃⰰⰳⱁⰲⰻ]
 
 # ---- Text scramble -----------------------------------------------------------
@@ -33,8 +34,10 @@ scramble:
 background:
   # Keys in the R2 bucket (served from public/media/ in local dev).
   video:
-    webm: landing/background.webm
-    mp4: landing/background.mp4
+    mp4: landing/juga.mp4
+  # Which part of the video shows through the mask (CSS object-position: x y). The video
+  # is cropped to the mask's shape, so this slides it around inside the frame.
+  position: "50% 40%"
   # The coastline mask, applied to the video at runtime: white/opaque shows the video,
   # transparent hides it. Lives in public/ (same origin) because the stain reads its
   # pixels. Swapping the video keeps this mask; its aspect ratio sets the frame's.

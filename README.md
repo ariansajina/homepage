@@ -51,6 +51,7 @@ Everything is files in this repo:
 | Where to find me next | `src/data/upcoming.yaml` (empty list hides the button)                                                              |
 | About                 | `src/pages/about.astro`                                                                                             |
 | Landing words         | `src/config/landing.yaml`                                                                                           |
+| Feature flags         | Env vars (see `.env.example`): `FEATURE_TRACES=true` shows the Conversations page; unset or `false` hides it        |
 
 Media fields hold an R2 **key** such as `dances/sprezzatura.mp4`, never a full URL;
 `src/lib/media.ts` turns it into a URL.
@@ -89,7 +90,11 @@ Files the site expects in the bucket today:
 ```
 landing/background.webm
 landing/background.mp4
+landing/juga.mp4
 about/arian.jpg
+about/arian.mp4
+letters/email.png
+works/delaj.mp4
 music/da-smo-se-ranije-sreli.mp3
 music/tesko-mi-je-zaboravit-tebe.mp3
 ```

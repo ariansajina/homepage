@@ -1,12 +1,13 @@
 ---
 import Sub from "../../layouts/Sub.astro";
 import { sortedLetters } from "../../lib/content";
+import { media } from "../../lib/media";
 
 const letters = await sortedLetters();
 ---
 
 <Sub title="Letters" description="Letters and essays by Arian Šajina.">
-  <div class="view top">
+  <div class="view top letters-view">
     <ul class="letters">
       {letters.map((l) => (
         <li>
@@ -17,10 +18,35 @@ const letters = await sortedLetters();
         </li>
       ))}
     </ul>
+    <img
+      class="corner-img"
+      src={media("letters/email.png")}
+      width="675"
+      height="900"
+      alt="A dithered photo of a phone showing an email that begins “Dear friend,”"
+    />
   </div>
 </Sub>
 
 <style>
+  .letters-view {
+    position: relative;
+  }
+  .corner-img {
+    position: absolute;
+    right: 12px;
+    bottom: 24px;
+    width: clamp(180px, 22vw, 300px);
+    height: auto;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+  @media (max-width: 600px) {
+    .corner-img {
+      right: 0;
+      width: 46vw;
+    }
+  }
   .letters {
     list-style: none;
     margin: 0;

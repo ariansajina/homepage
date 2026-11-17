@@ -5,6 +5,9 @@
 // (the CSS height below guarantees that is more than one line of text).
 import Sub from "../../layouts/Sub.astro";
 import { sortedWorks } from "../../lib/content";
+import { media } from "../../lib/media";
+
+const clip = media("works/delaj.mp4");
 
 const works = await sortedWorks();
 const t = works.map((w) => w.data.date.getTime());
@@ -37,8 +40,29 @@ const items = works.map((w, i) => ({
         </li>
       ))}
     </ul>
+    {/* Decorative loops in the two corners the diagonal leaves empty (top-right and
+        bottom-left); on phones only the right-hand one is shown. */}
+    {["tr", "bl"].map((corner) => (
+      <video
+        class={`clip clip-${corner}`}
+        src={clip}
+        width="1280"
+        height="2276"
+        autoplay
+        muted
+        loop
+        playsinline
+        aria-hidden="true"
+        tabindex="-1"
+        data-works-video
+      />
+    ))}
   </div>
 </Sub>
+
+<script>
+  import "../../scripts/works-video";
+</script>
 
 <style>
   .works {
@@ -58,6 +82,23 @@ const items = works.map((w, i) => ({
     line-height: 1.2;
     text-transform: lowercase;
   }
+  .works {
+    position: relative;
+  }
+  .clip {
+    position: absolute;
+    width: clamp(110px, 14vw, 200px);
+    height: auto;
+    pointer-events: none;
+  }
+  .clip-tr {
+    top: calc(92px + 2.5vh);
+    right: 32px;
+  }
+  .clip-bl {
+    bottom: 120px;
+    left: 32px;
+  }
   .tl-item {
     position: absolute;
     margin: 0;
@@ -66,6 +107,17 @@ const items = works.map((w, i) => ({
     transform: translateX(calc(var(--f, 0) * -100%));
   }
   @media (max-width: 600px) {
+    .clip {
+      width: 34vw;
+    }
+    .clip-tr {
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+    }
+    .clip-bl {
+      display: none;
+    }
     .tl-item {
       left: 0;
       transform: none;

@@ -58,6 +58,8 @@ already there.
 - `src/scripts/`: client behaviour as plain TS modules: `player.ts` (decks + audio),
   `topbar.ts`, `scramble.ts`, `stain.ts`, `landing-video.ts`, `dances.ts`,
   `conversations.ts`.
+- `src/lib/features.ts`: feature flags from env vars (`FEATURE_TRACES=true` shows the Conversations
+  page, its landing link and its top-bar route; unset means off).
 - `src/config/landing.yaml`: **all landing tweaks**: menu words, scramble timing,
   background video keys + mask, stain settings. Validated by `src/lib/landing-config.ts`
   (a zod schema); a bad value fails the build with the key's path. So does a stain

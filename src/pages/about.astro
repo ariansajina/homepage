@@ -3,6 +3,7 @@ import Sub from "../layouts/Sub.astro";
 import { media } from "../lib/media";
 
 const photo = media("about/arian.jpg");
+const video = media("about/arian.mp4");
 ---
 
 <Sub
@@ -12,13 +13,20 @@ const photo = media("about/arian.jpg");
 >
   <div class="view">
     <div class="about-wrap">
-      <img
+      <video
         class="about-img"
-        src={photo}
-        width="675"
-        height="900"
-        alt="Arian Šajina at a restaurant table, with his bag circled in red"
-      />
+        src={video}
+        poster={photo}
+        width="1280"
+        height="2276"
+        autoplay
+        muted
+        loop
+        playsinline
+        controls
+        data-about-video
+        aria-label="Arian Šajina"
+      ></video>
       <div class="txt about-text">
         <p>
           If I was born a century ago, I’d be a member of the intelligentsia. Two, and I’d be a
@@ -49,6 +57,10 @@ const photo = media("about/arian.jpg");
     </div>
   </div>
 </Sub>
+
+<script>
+  import "../scripts/about-video";
+</script>
 
 <style>
   .about-wrap {
