@@ -91,6 +91,27 @@ const video = media("about/arian.mp4");
   .about-text p:last-child {
     margin: 0;
   }
+  /* Desktop: text on the left, video on the right, both inside one screen. The video
+     is portrait, so its height (not width) is what is capped to the viewport. */
+  @media (min-width: 761px) {
+    .about-wrap {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 56px;
+      max-width: 62em;
+    }
+    .about-text {
+      flex: 1 1 0;
+      max-width: 36em;
+    }
+    .about-img {
+      width: auto;
+      height: min(calc(100vh - 210px), 640px);
+      max-width: 40%;
+      object-fit: contain;
+    }
+  }
   @media (max-width: 760px) {
     .about-wrap {
       gap: 32px;
