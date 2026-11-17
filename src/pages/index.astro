@@ -22,7 +22,7 @@ const grid = {
   width: landing.stain.resolution,
   height: Math.round((landing.stain.resolution * maskSize.height) / maskSize.width),
 };
-const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.position}; --aspect: ${maskSize.width} / ${maskSize.height}`;
+const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.position}; --aspect: ${maskSize.width} / ${maskSize.height}; --ratio: ${maskSize.width / maskSize.height}; --items: ${entries.length}`;
 ---
 
 <Base>
@@ -76,6 +76,10 @@ const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.po
     font-weight: 400;
     position: relative;
     overflow: hidden;
+    --fs: 28px; /* menu font size */
+    /* On narrow screens the video sits under the (vertically centred) menu: this is the
+       height left between the menu's bottom edge, plus a small gap, and the page bottom. */
+    --room: calc(50vh - var(--items, 4) * 0.85 * var(--fs) - 12px);
   }
   .bgv,
   .bgc {
@@ -111,9 +115,8 @@ const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.po
     width: 10em;
     text-align: center;
     text-transform: lowercase;
-    font-size: 28px;
+    font-size: var(--fs);
     line-height: 1.7;
-    transform: translateY(max(-8vh, calc(170px - 50vh)));
   }
   .menu li {
     margin: 0;
@@ -129,17 +132,16 @@ const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.po
       top: auto;
       bottom: 0;
       transform: none;
-      width: 90vw;
+      width: min(90vw, calc(var(--room) * var(--ratio)));
     }
   }
   @media (max-width: 600px) {
-    .menu {
-      font-size: 24px;
-      transform: translateY(-7vh);
+    .landing {
+      --fs: 24px;
     }
     .bgv,
     .bgc {
-      width: 100vw;
+      width: min(100vw, calc(var(--room) * var(--ratio)));
       left: 0;
       right: auto;
     }
