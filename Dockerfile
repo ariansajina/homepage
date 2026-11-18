@@ -11,6 +11,8 @@ ARG PUBLIC_MEDIA_URL
 ARG SITE_URL
 # Feature flags (see src/lib/features.ts): unset or "false" keeps a feature off.
 ARG FEATURE_TRACES
+# Origin of the Sveltia CMS sign-in Worker (optional; see README → Editing with the CMS).
+ARG CMS_AUTH_URL
 RUN test -n "$PUBLIC_MEDIA_URL" || (echo "PUBLIC_MEDIA_URL must be set" && exit 1)
 RUN npm run build
 

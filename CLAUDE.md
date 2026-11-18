@@ -68,6 +68,10 @@ already there.
   preview). Documented in docs/stain.md. Keep that doc in step with the code.
 - `src/dev/`: the stain tuner, injected at `/dev/stain` by a small integration in
   `astro.config.mjs` only when `command === "dev"`. Never part of the build.
+- `src/config/cms.yml`: the Sveltia CMS config (forms at `/admin/`, commits to `main`).
+  Served by `src/pages/admin/config.yml.ts`, which adds the sign-in Worker URL from
+  `CMS_AUTH_URL`; the page itself is `src/pages/admin/index.astro`. Its fields mirror
+  `src/content.config.ts`: **change a content schema, change this too.**
 - `src/content.config.ts`: collections. Works and letters are Markdown in `src/content/`;
   dances, tracks, upcoming and conversations are YAML in `src/data/`.
 - `src/lib/media.ts`: the only place that turns an R2 key into a URL (`PUBLIC_MEDIA_URL`,
@@ -108,6 +112,5 @@ already there.
 ## Deploy
 
 Railway builds the Dockerfile on every push to `main`. It needs the service variables
-`PUBLIC_MEDIA_URL` (required; the build fails without it) and `SITE_URL` (canonical URLs
-
-- sitemap). Caddy serves `dist/` on `$PORT`, with `404.html` for unknown paths.
+`PUBLIC_MEDIA_URL` (required; the build fails without it), `CMS_AUTH_URL` (CMS GitHub
+sign-in; optional) and `SITE_URL` (canonical URLs and the sitemap). Caddy serves `dist/` on `$PORT`, with `404.html` for unknown paths.

@@ -23,5 +23,9 @@ export default defineConfig({
   output: "static",
   trailingSlash: "ignore",
   build: { format: "directory" },
-  integrations: [devPages, ...(site ? [sitemap()] : [])],
+  integrations: [
+    devPages,
+    // The CMS at /admin/ is not a page for search engines.
+    ...(site ? [sitemap({ filter: (page) => !new URL(page).pathname.startsWith("/admin") })] : []),
+  ],
 });

@@ -1,0 +1,282 @@
+# Sveltia CMS configuration (served at /admin/config.yml by src/pages/admin/config.yml.ts,
+# which adds the OAuth sign-in URL from CMS_AUTH_URL). Field names and types mirror the
+# schemas in src/content.config.ts: change both together, or the CMS writes values the
+# build rejects. Schema reference: https://sveltiacms.app/en/docs
+#
+# Media is never uploaded through the CMS: it goes to R2 with scripts/upload-media.sh, and
+# entries hold the R2 key as plain text (e.g. dances/dance-01.mp4). The default media
+# storage is switched off so nothing can be committed to the repo from the Assets view.
+
+backend:
+  name: github
+  repo: ariansajina/homepage
+  branch: main
+  commit_messages:
+    create: "Content: add {{collection}} “{{slug}}”"
+    update: "Content: update {{collection}} “{{slug}}”"
+    delete: "Content: delete {{collection}} “{{slug}}”"
+
+app_title: Homepage CMS
+logo:
+  src: /favicon.svg
+
+# Required by the CMS even with no media storage. public/media/ is the gitignored local
+# mirror of R2; with the default storage off, nothing is uploaded there.
+media_folder: public/media
+public_folder: /media
+media_libraries:
+  default: false
+
+output:
+  # Leave out optional fields that are empty, so the schema's defaults apply (an empty
+  # `href: ""` would fail the URL check).
+  omit_empty_optional_fields: true
+  # Prettier's quote style, so files saved by the CMS pass `npm run lint`.
+  yaml:
+    quote: double
+
+collections:
+  - name: works
+    label: Works
+    label_singular: Work
+    icon: theater_comedy
+    folder: src/content/works
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}} ({{year}})"
+    sortable_fields:
+      fields: [date, title]
+      default: { field: date, direction: descending }
+    preview_path: "works/{{slug}}/"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: year
+        label: Year
+        widget: string
+        hint: As shown on the page, e.g. `2022` or `2023–2024`.
+      - name: date
+        label: Date
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        hint: Earliest date of the work. Works are listed newest first by this date.
+      - name: link
+        label: Link
+        widget: object
+        required: false
+        fields:
+          - { name: href, label: URL, widget: string, type: url }
+          - { name: label, label: Label, widget: string }
+      - name: credits
+        label: Credits
+        label_singular: credit
+        widget: list
+        required: false
+        collapsed: auto
+        summary: "{{role}}: {{name}}"
+        fields:
+          - { name: role, label: Role, widget: string }
+          - { name: name, label: Name(s), widget: string }
+      - name: shows
+        label: Shows
+        label_singular: show
+        widget: list
+        required: false
+        collapsed: auto
+        summary: "{{when}}, {{where}}"
+        fields:
+          - { name: when, label: When, widget: string, hint: "e.g. Apr 2022" }
+          - { name: where, label: Where, widget: string }
+      - name: body
+        label: Description
+        widget: markdown
+        modes: [raw]
+
+  - name: letters
+    label: Letters
+    label_singular: Letter
+    icon: mail
+    folder: src/content/letters
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}} ({{published | date('YYYY-MM-DD')}})"
+    sortable_fields:
+      fields: [published, title]
+      default: { field: published, direction: descending }
+    preview_path: "letters/{{slug}}/"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: published
+        label: Published
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+      - name: edited
+        label: Edited
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        required: false
+      - name: description
+        label: Description
+        widget: text
+        required: false
+        hint: One or two sentences, used for search engines and link previews.
+      - name: cover
+        label: Cover
+        widget: object
+        required: false
+        fields:
+          - { name: type, label: Type, widget: select, options: [image, video], default: image }
+          - name: src
+            label: R2 key
+            widget: string
+            hint: Upload with `scripts/upload-media.sh` first, e.g. `letters/use-signal.jpg`.
+          - { name: alt, label: Alt text, widget: string }
+          - name: width
+            label: Width (px)
+            widget: number
+            value_type: int
+            min: 1
+            required: false
+            hint: Images only. Intrinsic size, so the page keeps its space while it loads.
+          - {
+              name: height,
+              label: Height (px),
+              widget: number,
+              value_type: int,
+              min: 1,
+              required: false,
+            }
+          - { name: caption, label: Caption, widget: string, required: false }
+      - name: body
+        label: Text
+        widget: markdown
+        # Raw Markdown only: the rich text editor would rewrite the <figure> HTML and the
+        # formatting of the text.
+        modes: [raw]
+        hint: >-
+          Media goes in as a `<figure>` (class `wide` to reach past the text column,
+          `pair` for two side by side), with the full media URL as the source.
+
+  - name: lists
+    label: Lists
+    icon: list
+    description: The YAML lists in src/data/. Order matters in all of them.
+    files:
+      - name: dances
+        label: Dances
+        file: src/data/dances.yaml
+        fields:
+          - name: items
+            label: Dances
+            label_singular: dance
+            widget: list
+            root: true
+            collapsed: true
+            summary: "{{title}} ({{length}})"
+            fields:
+              - &id
+                name: id
+                label: ID
+                widget: string
+                pattern: ["^[a-z0-9-]+$", "Lowercase letters, digits and hyphens only"]
+                hint: Unique within this list. Never shown on the site.
+              - { name: title, label: Title, widget: string }
+              - { name: length, label: Length, widget: string, hint: "e.g. 0:41" }
+              - name: video
+                label: Video (R2 key)
+                widget: string
+                required: false
+                hint: e.g. `dances/dance-01.mp4`. Empty shows a placeholder.
+              - name: poster
+                label: Poster (R2 key)
+                widget: string
+                required: false
+                hint: e.g. `dances/dance-01-poster.jpg`.
+
+      - name: tracks
+        label: Music
+        file: src/data/tracks.yaml
+        fields:
+          - name: items
+            label: Tracks (in play order)
+            label_singular: track
+            widget: list
+            root: true
+            collapsed: true
+            summary: "{{artist}}: {{title}}"
+            fields:
+              - *id
+              - { name: title, label: Title, widget: string }
+              - { name: artist, label: Artist, widget: string }
+              - { name: src, label: Audio (R2 key), widget: string, hint: "e.g. `music/song.mp3`" }
+
+      - name: upcoming
+        label: Upcoming
+        file: src/data/upcoming.yaml
+        fields:
+          - name: items
+            label: Upcoming (soonest first)
+            label_singular: date
+            widget: list
+            root: true
+            required: false
+            collapsed: true
+            summary: "{{title}}, {{where}}"
+            hint: The corner button disappears when this list is empty.
+            fields:
+              - *id
+              - { name: title, label: Title, widget: string }
+              - name: where
+                label: When and where
+                widget: string
+                hint: Shown in grey, e.g. `january 2027 copenhagen`.
+
+      - name: conversations
+        label: Conversations
+        file: src/data/conversations.yaml
+        fields:
+          - name: items
+            label: Shelf (shown in this order)
+            label_singular: item
+            widget: list
+            root: true
+            collapsed: true
+            summary: "{{title}} ({{kind}})"
+            fields:
+              - *id
+              - { name: title, label: Title, widget: string }
+              - name: by
+                label: By
+                widget: string
+                required: false
+                hint: Author or maker and year, e.g. `Ted Chiang 2002`.
+              - {
+                  name: kind,
+                  label: Kind,
+                  widget: select,
+                  options: [books, films, podcasts, pages],
+                }
+              - { name: note, label: Note, widget: text, required: false }
+              - name: href
+                label: Link
+                widget: string
+                type: url
+                required: false
+                hint: Optional; shown on the “by” line.
+              - name: pics
+                label: Pictures
+                label_singular: picture
+                widget: list
+                required: false
+                collapsed: auto
+                fields:
+                  - name: src
+                    label: R2 key
+                    widget: string
+                    required: false
+                    hint: Empty shows a grey placeholder.
+                  - { name: alt, label: Alt text, widget: string }
