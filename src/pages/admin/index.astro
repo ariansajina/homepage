@@ -1,0 +1,19 @@
+---
+// Sveltia CMS (https://sveltiacms.app): a standalone page, no site layout. Its config is
+// src/config/cms.yml, served at /admin/config.yml. The CMS version is pinned below; to
+// upgrade, change it and read https://github.com/sveltia/sveltia-cms/releases.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Homepage CMS</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link href="/admin/config.yml" type="application/yaml" rel="cms-config-url" />
+    <script is:inline src="https://unpkg.com/@sveltia/cms@0.258.1/dist/sveltia-cms.js"></script>
+  </head>
+  <body></body>
+</html>
