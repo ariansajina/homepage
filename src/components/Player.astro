@@ -4,11 +4,13 @@
 import { getCollection } from "astro:content";
 import { media } from "../lib/media";
 
-const tracks = (await getCollection("tracks")).map(({ data }) => ({
-  title: data.title,
-  artist: data.artist,
-  src: media(data.src),
-}));
+const tracks = (await getCollection("tracks"))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map(({ data }) => ({
+    title: data.title,
+    artist: data.artist,
+    src: media(data.src),
+  }));
 const first = tracks[0] ?? { title: "", artist: "", src: "" };
 ---
 

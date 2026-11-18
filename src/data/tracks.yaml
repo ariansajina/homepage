@@ -1,4 +1,5 @@
 # Music player tracks, in play order. src = key in the R2 bucket.
+# Branko Mataja, Over Fields and Mountains.
 - id: da-smo-se-ranije-sreli
   title: Da Smo Se Ranije Sreli
   artist: Branko Mataja
@@ -7,3 +8,43 @@
   title: Teško Mi Je Zaboravit Tebe
   artist: Branko Mataja
   src: music/tesko-mi-je-zaboravit-tebe.mp3
+- id: tebi-majko-misli-lete
+  title: Tebi Majko Misli Lete
+  artist: Branko Mataja
+  src: music/tebi-majko-misli-lete.mp3
+- id: susti-bagrem-beli
+  title: Šušti Bagrem Beli
+  artist: Branko Mataja
+  src: music/susti-bagrem-beli.mp3
+- id: hteo-bi-te-zaboraviti
+  title: Hteo Bi Te Zaboraviti
+  artist: Branko Mataja
+  src: music/hteo-bi-te-zaboraviti.mp3
+- id: sero-sam-te
+  title: Šero Sam Te
+  artist: Branko Mataja
+  src: music/sero-sam-te.mp3
+- id: tamo-daleko
+  title: Tamo Daleko
+  artist: Branko Mataja
+  src: music/tamo-daleko.mp3
+- id: cija-li-je-livada
+  title: Čija Li Je Livada
+  artist: Branko Mataja
+  src: music/cija-li-je-livada.mp3
+- id: kafu-mi-draga-ispeci
+  title: Kafu Mi Draga Ispeci
+  artist: Branko Mataja
+  src: music/kafu-mi-draga-ispeci.mp3
+- id: kad-ja-podoh-na-bembasu
+  title: Kad Ja Podoh Na Bembašu
+  artist: Branko Mataja
+  src: music/kad-ja-podoh-na-bembasu.mp3
+- id: duboko-je-more
+  title: Duboko Je More
+  artist: Branko Mataja
+  src: music/duboko-je-more.mp3
+- id: zapletnicki-cacak
+  title: Zapletnički Čačak
+  artist: Branko Mataja
+  src: music/zapletnicki-cacak.mp3

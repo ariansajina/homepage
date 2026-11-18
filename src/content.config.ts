@@ -52,9 +52,19 @@ const dances = defineCollection({
 });
 
 // Music for the player, in play order. `src` is an R2 key.
+// The loader hands entries back sorted by id, so the parser records each one's place in the
+// file as `order`; the player sorts by it to keep the play order.
 const tracks = defineCollection({
-  loader: file("src/data/tracks.yaml"),
-  schema: z.object({ title: z.string(), artist: z.string(), src: z.string() }),
+  loader: file("src/data/tracks.yaml", {
+    parser: (text) =>
+      (parseYaml(text) as Record<string, unknown>[]).map((entry, order) => ({ ...entry, order })),
+  }),
+  schema: z.object({
+    order: z.number().int(),
+    title: z.string(),
+    artist: z.string(),
+    src: z.string(),
+  }),
 });
 
 // "Where to find me next", soonest first. The corner button hides when this is empty.
