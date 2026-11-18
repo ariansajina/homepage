@@ -40,6 +40,12 @@ const letters = defineCollection({
   }),
 });
 
+// About: the text of the about page, one Markdown file (the body is the content).
+const about = defineCollection({
+  loader: glob({ pattern: "about.md", base: "./src/content" }),
+  schema: z.object({}),
+});
+
 // Dances: short videos (1–5 min). `video` and `poster` are R2 keys; empty = placeholder.
 const dances = defineCollection({
   loader: file("src/data/dances.yaml"),
@@ -93,4 +99,4 @@ const conversations = defineCollection({
   }),
 });
 
-export const collections = { works, letters, dances, tracks, upcoming, conversations };
+export const collections = { about, works, letters, dances, tracks, upcoming, conversations };

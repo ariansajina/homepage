@@ -161,6 +161,20 @@ collections:
           Media goes in as a `<figure>` (class `wide` to reach past the text column,
           `pair` for two side by side), with the full media URL as the source.
 
+  - name: pages
+    label: Pages
+    icon: article
+    files:
+      - name: about
+        label: About
+        file: src/content/about.md
+        format: frontmatter
+        fields:
+          - name: body
+            label: Text
+            widget: markdown
+            modes: [raw]
+
   - name: lists
     label: Lists
     icon: list
