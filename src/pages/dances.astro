@@ -13,32 +13,43 @@ const dances = (await getCollection("dances")).map(({ id, data }) => ({
   video: media(data.video),
   poster: media(data.poster),
 }));
+const figure = media("dances/figure.png");
 ---
 
 <Sub title="Dances" description="Short dance videos by Arian Šajina.">
-  <div class="view top">
-    <ul class="dgrid">
-      {dances.map((d) => (
-        <li class="dcell">
-          <button
-            class="dcard"
-            type="button"
-            aria-label={`play ${d.title}`}
-            data-dance={JSON.stringify(d)}
-          >
-            <span
-              class="dthumb"
-              aria-hidden="true"
-              style={d.poster ? `background-image: url('${d.poster}')` : undefined}
-            />
-          </button>
-          <p class="dcap">
-            <span class="dt">{d.title}</span>
-            <span class="dlen">{d.length}</span>
-          </p>
-        </li>
-      ))}
-    </ul>
+  <div class="view top dpage">
+    <div class="dlayout">
+      <ul class="dgrid">
+        {dances.map((d) => (
+          <li class="dcell">
+            <button
+              class="dcard"
+              type="button"
+              aria-label={`play ${d.title}`}
+              data-dance={JSON.stringify(d)}
+            >
+              <span
+                class="dthumb"
+                aria-hidden="true"
+                style={d.poster ? `background-image: url('${d.poster}')` : undefined}
+              />
+            </button>
+            <p class="dcap">
+              <span class="dt">{d.title}</span>
+              <span class="dlen">{d.length}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+      <div class="dfigure" aria-hidden="true">
+        <img src={figure} width="900" height="565" alt="" />
+      </div>
+    </div>
+    <p class="dtop">
+      <a href="#top" data-to-top>
+        back to top ↑
+      </a>
+    </p>
   </div>
 
   <dialog class="dov" aria-label="video" data-dance-dialog>
@@ -186,6 +197,53 @@ const dances = (await getCollection("dances")).map(({ id, data }) => ({
     outline: 1px solid #fff;
     outline-offset: 2px;
   }
+  .dlayout {
+    box-sizing: border-box;
+    width: min(1400px, 100%);
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  /* The grid block and the back link stack down the page, centred. */
+  .view.top.dpage {
+    flex-direction: column;
+    align-items: center;
+  }
+  .dtop {
+    box-sizing: border-box;
+    width: min(1400px, 100%);
+    margin: 3.2em 0 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .dtop a {
+    text-decoration: none;
+    color: var(--muted);
+  }
+  @media (hover: hover) {
+    .dtop a:hover {
+      color: var(--ink);
+    }
+  }
+  .dlayout .dgrid {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+  }
+  /* Desktop: pinned to the right, vertically centred, staying put while the grid scrolls. */
+  .dfigure {
+    position: sticky;
+    top: 50vh;
+    transform: translateY(-50%);
+    flex: 0 0 clamp(160px, 18vw, 260px);
+  }
+  .dfigure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
   @media (max-width: 900px) {
     .dgrid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -199,8 +257,45 @@ const dances = (await getCollection("dances")).map(({ id, data }) => ({
       font-size: 12px;
     }
   }
+  /* Phone: a single column, the figure centred underneath the grid. */
+  @media (max-width: 600px) {
+    .dlayout {
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    .dlayout .dgrid {
+      width: 100%;
+    }
+    .dfigure {
+      position: static;
+      transform: none;
+      height: auto;
+      flex: none;
+      width: 46vw;
+    }
+  }
 </style>
 
 <script>
   import "../scripts/dances";
+
+  // The back link only shows when the page scrolls; hide it when everything fits.
+  const syncTopLink = () => {
+    const wrap = document.querySelector<HTMLElement>(".dtop");
+    if (wrap) wrap.hidden = document.documentElement.scrollHeight <= window.innerHeight + 1;
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    syncTopLink();
+    window.addEventListener("resize", syncTopLink);
+    document.querySelector("[data-to-top]")?.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+    });
+  });
+  document.addEventListener("astro:before-swap", () => {
+    window.removeEventListener("resize", syncTopLink);
+  });
 </script>

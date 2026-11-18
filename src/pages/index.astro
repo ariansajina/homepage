@@ -22,7 +22,7 @@ const grid = {
   width: landing.stain.resolution,
   height: Math.round((landing.stain.resolution * maskSize.height) / maskSize.width),
 };
-const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.position}; --aspect: ${maskSize.width} / ${maskSize.height}; --ratio: ${maskSize.width / maskSize.height}; --items: ${entries.length}`;
+const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.position}; --aspect: ${maskSize.width} / ${maskSize.height}`;
 ---
 
 <Base>
@@ -77,9 +77,6 @@ const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.po
     position: relative;
     overflow: hidden;
     --fs: 28px; /* menu font size */
-    /* On narrow screens the video sits under the (vertically centred) menu: this is the
-       height left between the menu's bottom edge, plus a small gap, and the page bottom. */
-    --room: calc(50vh - var(--items, 4) * 0.85 * var(--fs) - 12px);
   }
   .bgv,
   .bgc {
@@ -132,7 +129,7 @@ const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.po
       top: auto;
       bottom: 0;
       transform: none;
-      width: min(90vw, calc(var(--room) * var(--ratio)));
+      width: 90vw;
     }
   }
   @media (max-width: 600px) {
@@ -141,7 +138,7 @@ const frameStyle = `--mask: url('${mask}'); --video-pos: ${landing.background.po
     }
     .bgv,
     .bgc {
-      width: min(100vw, calc(var(--room) * var(--ratio)));
+      width: 100vw;
       left: 0;
       right: auto;
     }
