@@ -84,7 +84,7 @@ already there.
 - `scripts/encode-media.sh`, `scripts/upload-media.sh`: the media pipeline. Run locally,
   never in the build.
 - `Dockerfile`, `Caddyfile`, `railway.json`: deployment.
-- `.claude/`: Claude Code hooks (`settings.json`, `hooks/`) and the `run-homepage` skill.
+- `.claude/`: Claude Code hooks (`settings.json`, `hooks/`) and the `run-homepage` and `upload-media` skills.
 
 ## Conventions
 
