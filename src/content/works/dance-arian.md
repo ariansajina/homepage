@@ -12,7 +12,11 @@ shows:
   - { when: 5 Oct 2018, where: "You Better Move, Dansmakers, Amsterdam" }
 photos:
   - src: works/dance-arian-1.jpg
+    width: 1000
+    height: 666
   - src: works/dance-arian-2.jpg
+    width: 1000
+    height: 668
 ---
 
 How can the body keep transforming into a series of fairytale-like creatures? This is the question Nika Janković Disney landed on when she entered the studio with Arian to develop a choreography for a short solo piece, which in retrospect marked the beginning of an ongoing collaboration between the two.

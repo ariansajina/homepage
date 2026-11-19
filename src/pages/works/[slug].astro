@@ -13,6 +13,45 @@ const w = entry.data;
 const { Content } = await render(entry);
 // Falls back to the site's default description when the work has no text.
 const description = (entry.body ?? "").replace(/\s+/g, " ").trim().slice(0, 160) || undefined;
+
+// Justified rows (desktop): photos are grouped so each row's summed aspect ratio comes
+// close to TARGET. In a row every photo grows in proportion to its ratio, so all photos
+// in it share one height and the row fills the width. Only a last row under three
+// quarters full keeps the target height and is just as wide as it needs to be.
+const TARGET = 4;
+const photos = w.photos.map((p) => ({
+  ...p,
+  ratio: p.width && p.height ? p.width / p.height : 3 / 2,
+}));
+const total = photos.reduce((sum, p) => sum + p.ratio, 0);
+// Few photos: one taller row that fills the width rather than a short, narrow one.
+const target = Math.min(TARGET, Math.max(1.6, total));
+const rows: { photos: typeof photos; sum: number }[] = [];
+let row: typeof photos = [];
+let sum = 0;
+for (const p of photos) {
+  // Close the row before this photo when stopping here lands nearer the target.
+  if (row.length && sum + p.ratio > target && target - sum < sum + p.ratio - target) {
+    rows.push({ photos: row, sum });
+    row = [];
+    sum = 0;
+  }
+  row.push(p);
+  sum += p.ratio;
+  if (sum >= target) {
+    rows.push({ photos: row, sum });
+    row = [];
+    sum = 0;
+  }
+}
+if (row.length) {
+  // A lone short last row joins the previous one when it is less than half a row.
+  const prev = rows.at(-1);
+  if (prev && sum < target / 2) {
+    prev.photos.push(...row);
+    prev.sum += sum;
+  } else rows.push({ photos: row, sum });
+}
 ---
 
 <Sub title={w.title} description={description} back="/works/" showHome>
@@ -24,12 +63,26 @@ const description = (entry.body ?? "").replace(/\s+/g, " ").trim().slice(0, 160)
         <Content />
       </div>
       {w.photos.length > 0 && (
-        <div class="photos">
-          {w.photos.map((p) => (
-            <figure>
-              <img src={media(p.src)} alt={p.caption ?? w.title} loading="lazy" decoding="async" />
-              {p.caption && <figcaption>{p.caption}</figcaption>}
-            </figure>
+        <div class:list={["photos", { solo: photos.length === 1 }]}>
+          {rows.map((r, i) => (
+            <div
+              class="row"
+              style={`--fill: ${i < rows.length - 1 || r.sum >= target * 0.75 ? 1 : r.sum / target}`}
+            >
+              {r.photos.map((p) => (
+                <figure style={`--ratio: ${p.ratio}`}>
+                  <img
+                    src={media(p.src)}
+                    alt={p.caption ?? w.title}
+                    width={p.width}
+                    height={p.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  {p.caption && <figcaption>{p.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
           ))}
         </div>
       )}
@@ -94,10 +147,37 @@ const description = (entry.body ?? "").replace(/\s+/g, " ").trim().slice(0, 160)
     border-left: 1px solid var(--muted);
     color: var(--muted);
   }
-  .photos {
-    margin-top: 1.6em;
+  .photos,
+  .row {
     display: grid;
     gap: 1em;
+  }
+  .photos {
+    margin-top: 1.6em;
+  }
+  /* Desktop: the photos break out of the text column into justified rows. */
+  @media (min-width: 601px) {
+    .photos {
+      --gap: 8px;
+      gap: var(--gap);
+      width: min(960px, 100vw - 64px);
+      margin-left: 50%;
+      translate: -50% 0;
+    }
+    .row {
+      display: flex;
+      gap: var(--gap);
+      width: calc(var(--fill) * 100%);
+    }
+    /* A single photo sits centred under the text. */
+    .solo .row {
+      margin-inline: auto;
+    }
+    .row figure {
+      /* Scaled: grow values that sum below 1 would leave part of the row empty. */
+      flex: calc(var(--ratio) * 100) 1 0;
+      min-width: 0;
+    }
   }
   .photos figure {
     margin: 0;

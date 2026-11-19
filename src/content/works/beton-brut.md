@@ -9,7 +9,11 @@ shows:
   - { when: 11 Jun 2023, where: "URB festival, Helsinki" }
 photos:
   - src: works/beton-brut-1.webp
+    width: 1500
+    height: 1000
   - src: works/beton-brut-2.webp
+    width: 1500
+    height: 1000
 ---
 
 Hungry Sharks production, choreography by Valentin Alfery. I substituted an injured dancer (Alexander Tesch) on short notice in the finished piece.

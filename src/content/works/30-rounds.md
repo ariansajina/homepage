@@ -7,17 +7,41 @@ shows:
   - { when: 3 Sep 2026, where: "Worksharing, HAUT, Copenhagen" }
 photos:
   - src: works/30-rounds-1.jpg
+    width: 1144
+    height: 1526
   - src: works/30-rounds-2.jpg
+    width: 1500
+    height: 2000
   - src: works/30-rounds-3.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-4.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-5.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-6.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-7.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-8.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-9.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-10.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-11.jpg
+    width: 2000
+    height: 1333
   - src: works/30-rounds-12.jpg
+    width: 2000
+    height: 1333
 ---
 
 In Process two-week research residency at HAUT, Copenhagen: my first author work, made together with four invited artists, all breakers older than thirty (Marco Payer, Tunde Ade, Dung Chinh Nguyen aka Slowz and Connor Gribben), and curator Tijana Mišković.

@@ -18,14 +18,32 @@ shows:
   - { when: 18 Jan 2025, where: "ZPC, Zagreb" }
 photos:
   - src: works/unisono-1.jpg
+    width: 2000
+    height: 1333
   - src: works/unisono-2.jpg
+    width: 2000
+    height: 1333
   - src: works/unisono-3.jpg
+    width: 2000
+    height: 1334
   - src: works/unisono-4.jpg
+    width: 2000
+    height: 1333
   - src: works/unisono-5.jpg
+    width: 2000
+    height: 1333
   - src: works/unisono-6.jpg
+    width: 1333
+    height: 2000
   - src: works/unisono-7.jpg
+    width: 2000
+    height: 1333
   - src: works/unisono-8.jpg
+    width: 1334
+    height: 2000
   - src: works/unisono-9.jpg
+    width: 2000
+    height: 1333
 ---
 
 _Unisono_ presents us with an intelligent and sensitive individual in a society dominated by appearance. You are what you appear to be, what we decide your actions represent. When an AI system breaks down and miscalculates his societal points, placing him lower on the social scale, he begins to lose his drive for diligence and sense of compassion.

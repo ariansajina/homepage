@@ -16,8 +16,14 @@ shows:
   - { when: Nov 2026, where: "Premiere, Istria" }
 photos:
   - src: works/sprezzatura-1.jpg
+    width: 1067
+    height: 1600
   - src: works/sprezzatura-2.jpg
+    width: 1600
+    height: 900
   - src: works/sprezzatura-3.jpg
+    width: 1600
+    height: 1067
 ---
 
 Latest collaboration between Arian and Nika Disney, joined by Ema Janković Bates.
