@@ -29,11 +29,14 @@ function start(videos: HTMLVideoElement[]) {
   };
 
   // Start them together: all from 0 once every copy has enough data.
-  const ready = () => videos.every((v) => v.readyState >= 3);
+  // Only the copies on screen count: a hidden one (the bottom-left clip on phones) may
+  // never buffer, and must not hold the visible one back.
+  const shown = () => videos.filter(visible);
+  const ready = () => shown().every((v) => v.readyState >= 3);
   const begin = () => {
     if (!ready()) return;
-    videos.forEach((v) => (v.currentTime = 0));
-    videos.forEach((v) => v.play().catch(() => {}));
+    shown().forEach((v) => (v.currentTime = 0));
+    shown().forEach((v) => v.play().catch(() => {}));
   };
   videos.forEach((v) => v.pause());
   if (ready()) begin();
