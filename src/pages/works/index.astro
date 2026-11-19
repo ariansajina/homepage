@@ -109,8 +109,16 @@ const items = works.map((w, i) => ({
     transform: translateX(calc(var(--f, 0) * -100%));
   }
   @media (max-width: 600px) {
+    /* One screen, no scrolling: the timeline takes what is left under the top bar and
+       above the corner decks, floored so neighbours stay a line apart. */
+    .works {
+      min-height: 100svh;
+      padding-bottom: 96px;
+    }
     .timeline {
       font-size: 15px;
+      margin-top: 0;
+      height: max(calc(100svh - 76px - 96px), calc(1.3em * var(--n, 1) / 0.95));
     }
     .clip {
       width: 34vw;
