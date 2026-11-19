@@ -78,7 +78,8 @@ const items = works.map((w, i) => ({
        MIN_GAP (5%) of this height is at least 1.3em. */
     height: max(520px, calc(95vh - 200px), calc(26em + 1.3em * (var(--n, 1) - 1)));
     text-align: left;
-    font-size: 16px;
+    /* Same size as the about page text. */
+    font-size: clamp(13px, calc(1.6vh + 2px), 17px);
     line-height: 1.2;
     text-transform: lowercase;
   }
@@ -107,6 +108,9 @@ const items = works.map((w, i) => ({
     transform: translateX(calc(var(--f, 0) * -100%));
   }
   @media (max-width: 600px) {
+    .timeline {
+      font-size: 15px;
+    }
     .clip {
       width: 34vw;
     }

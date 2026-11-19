@@ -121,8 +121,15 @@ if (row.length) {
   .work {
     width: 100%;
     max-width: 34em;
-    font-size: 17px;
-    line-height: 1.6;
+    /* Same size as the about page text. */
+    font-size: clamp(13px, calc(1.6vh + 2px), 17px);
+    line-height: 1.55;
+  }
+  @media (max-width: 600px) {
+    .work {
+      font-size: 15px;
+      line-height: 1.5;
+    }
   }
   h1 {
     margin: 0;
