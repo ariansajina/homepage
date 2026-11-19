@@ -14,6 +14,10 @@ credits:
 shows:
   - { when: May 2025, where: "Work in progress, 42nd Week of Contemporary Dance, Zagreb" }
   - { when: Nov 2026, where: "Premiere, Istria" }
+photos:
+  - src: works/sprezzatura-1.jpg
+  - src: works/sprezzatura-2.jpg
+  - src: works/sprezzatura-3.jpg
 ---
 
 Latest collaboration between Arian and Nika Disney, joined by Ema Janković Bates.

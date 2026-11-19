@@ -10,6 +10,9 @@ shows:
   - { when: 18 May 2018, where: "Streetforma, Zagreb" }
   - { when: 24 Sep 2018, where: "Dance Flavours #9, Theater aan de Rijn, Arnhem" }
   - { when: 5 Oct 2018, where: "You Better Move, Dansmakers, Amsterdam" }
+photos:
+  - src: works/dance-arian-1.jpg
+  - src: works/dance-arian-2.jpg
 ---
 
 How can the body keep transforming into a series of fairytale-like creatures? This is the question Nika Janković Disney landed on when she entered the studio with Arian to develop a choreography for a short solo piece, which in retrospect marked the beginning of an ongoing collaboration between the two.

@@ -14,6 +14,9 @@ credits:
   - { role: outside eye, name: Sophia Mage }
 shows:
   - { when: Apr 2022, where: "Work sharing, Forsøgsstationen, Copenhagen" }
+photos:
+  - src: works/decode-1.jpg
+  - src: works/decode-2.jpg
 ---
 
 Marco Payer invited me to join his research project as a dancer, assisted by Valentin Alfery. In Marco's own words:

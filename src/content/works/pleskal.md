@@ -3,6 +3,8 @@ title: pleskal.dk
 year: "2026"
 date: 2026-04-01
 link: { href: "https://pleskal.dk", label: pleskal.dk }
+photos:
+  - src: works/pleskal-1.png
 ---
 
 pleskal is an independent, community-driven public calendar for dance and performance art events in Copenhagen, which I built and run.

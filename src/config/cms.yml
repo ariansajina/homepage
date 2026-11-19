@@ -88,6 +88,17 @@ collections:
         fields:
           - { name: when, label: When, widget: string, hint: "e.g. Apr 2022" }
           - { name: where, label: Where, widget: string }
+      - name: photos
+        label: Photos
+        label_singular: photo
+        widget: list
+        required: false
+        collapsed: auto
+        summary: "{{src}}"
+        hint: R2 keys or full URLs. The first is the cover.
+        fields:
+          - { name: src, label: Key or URL, widget: string }
+          - { name: caption, label: Caption, widget: string, required: false }
       - name: body
         label: Description
         widget: markdown

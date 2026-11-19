@@ -2,6 +2,7 @@
 import { render } from "astro:content";
 import Sub from "../../layouts/Sub.astro";
 import { sortedWorks } from "../../lib/content";
+import { media } from "../../lib/media";
 
 export async function getStaticPaths() {
   return (await sortedWorks()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
@@ -22,6 +23,16 @@ const description = (entry.body ?? "").replace(/\s+/g, " ").trim().slice(0, 160)
       <div class="text">
         <Content />
       </div>
+      {w.photos.length > 0 && (
+        <div class="photos">
+          {w.photos.map((p) => (
+            <figure>
+              <img src={media(p.src)} alt={p.caption ?? w.title} loading="lazy" decoding="async" />
+              {p.caption && <figcaption>{p.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      )}
       {w.link && (
         <p class="txt link">
           <a href={w.link.href} target="_blank" rel="noopener">
@@ -81,6 +92,24 @@ const description = (entry.body ?? "").replace(/\s+/g, " ").trim().slice(0, 160)
   .text :global(blockquote) {
     padding-left: 1em;
     border-left: 1px solid var(--muted);
+    color: var(--muted);
+  }
+  .photos {
+    margin-top: 1.6em;
+    display: grid;
+    gap: 1em;
+  }
+  .photos figure {
+    margin: 0;
+  }
+  .photos img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .photos figcaption {
+    margin-top: 0.3em;
+    font-size: 15px;
     color: var(--muted);
   }
   .link {

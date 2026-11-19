@@ -14,6 +14,8 @@ const works = defineCollection({
     link: z.object({ href: z.url(), label: z.string() }).optional(),
     credits: z.array(z.object({ role: z.string(), name: z.string() })).default([]),
     shows: z.array(z.object({ when: z.string(), where: z.string() })).default([]),
+    // Photos: R2 keys (or full URLs); the first is the cover.
+    photos: z.array(z.object({ src: z.string(), caption: z.string().optional() })).default([]),
   }),
 });
 
