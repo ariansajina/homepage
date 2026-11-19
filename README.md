@@ -146,8 +146,11 @@ landing/background.webm
 landing/background.mp4
 landing/juga.mp4
 about/arian.jpg
-about/arian.mp4
+about/arian.png
 letters/email.png
+letters/use-signal.png
+letters/breaking-olympics-1.png
+letters/breaking-olympics-2.png
 works/delaj.mp4
 music/da-smo-se-ranije-sreli.mp3
 music/tesko-mi-je-zaboravit-tebe.mp3

@@ -14,6 +14,7 @@ const { entry } = Astro.props;
 const l = entry.data;
 const { Content } = await render(entry);
 const meta = longDate(l.published) + (l.edited ? `, last edited ${longDate(l.edited)}` : "");
+const closing = (l.closing ?? []).map((c) => ({ ...c, src: media(c.src) }));
 const cover = l.cover ? { ...l.cover, src: media(l.cover.src) } : undefined;
 ---
 
@@ -39,6 +40,16 @@ const cover = l.cover ? { ...l.cover, src: media(l.cover.src) } : undefined;
         </figure>
       )}
       <Content />
+      {closing.length > 0 && (
+        <figure class="closing">
+          <div class="closing-row">
+            {closing.map((c) => (
+              <img src={c.src} alt={c.alt} width={c.width} height={c.height} />
+            ))}
+          </div>
+          {l.closingCaption && <figcaption>{l.closingCaption}</figcaption>}
+        </figure>
+      )}
       <p class="letter-top">
         <a href="#top" data-to-top>
           back to top ↑
@@ -114,6 +125,18 @@ const cover = l.cover ? { ...l.cover, src: media(l.cover.src) } : undefined;
     height: auto;
     background: #f4f4f4;
   }
+  .closing-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .closing-row img {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 16.5em;
+    height: auto;
+    image-rendering: pixelated;
+  }
   .letter :global(figure.wide) {
     margin-left: -3.5em;
     margin-right: -3.5em;
@@ -164,6 +187,16 @@ const cover = l.cover ? { ...l.cover, src: media(l.cover.src) } : undefined;
   @media (hover: hover) {
     .letter .letter-top a:hover {
       color: var(--ink);
+    }
+  }
+  @media (max-width: 600px) {
+    .closing-row {
+      flex-direction: column;
+      gap: 16px;
+    }
+    .closing-row img {
+      flex: none;
+      width: 100%;
     }
   }
   @media (max-width: 760px) {

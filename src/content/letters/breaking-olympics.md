@@ -1,8 +1,18 @@
 ---
-title: "I don’t support breaking at the Olympics"
+title: "No to breaking at the Olympics"
 published: 2024-08-19
 edited: 2026-03-02
 description: "Why the Olympics are fundamentally at odds with the values and culture of breaking."
+closing:
+  - src: letters/breaking-olympics-1.png
+    alt: A crowd of people around a checkered dance floor, seen from above.
+    width: 674
+    height: 900
+  - src: letters/breaking-olympics-2.png
+    alt: A person crouched among equipment, seen from above.
+    width: 675
+    height: 900
+closingCaption: A jam in Paris, summer 2021.
 ---
 
 There is no question that the inclusion of breaking in the Olympics has some benefits. However, I think they are incompatible with the values and culture of breaking, and that breaking stand more to lose than to gain by pursuing Olympics as a platform. Here's why.

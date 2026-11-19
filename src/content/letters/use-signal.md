@@ -2,6 +2,11 @@
 title: Use Signal
 published: 2026-02-25
 description: "Why I keep asking my friends and loved ones to switch to Signal: it is not about you, it is about power."
+closing:
+  - src: letters/use-signal.png
+    alt: A figure in silhouette against clouds, holding up an antenna.
+    width: 507
+    height: 900
 ---
 
 I want you to use Signal. More often than I'd like to, I find myself annoying my friends and loved ones to switch, and having the same conversation over and over again. The conversation goes something like this...

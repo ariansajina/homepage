@@ -3,8 +3,7 @@ import Sub from "../layouts/Sub.astro";
 import { getEntry, render } from "astro:content";
 import { media } from "../lib/media";
 
-const photo = media("about/arian.jpg");
-const video = media("about/arian.mp4");
+const photo = media("about/arian.png");
 
 const entry = await getEntry("about", "about");
 if (!entry) throw new Error("src/content/about.md is missing");
@@ -18,30 +17,13 @@ const { Content } = await render(entry);
 >
   <div class="view">
     <div class="about-wrap">
-      <video
-        class="about-img"
-        src={video}
-        poster={photo}
-        width="1280"
-        height="2276"
-        autoplay
-        muted
-        loop
-        playsinline
-        controls
-        data-about-video
-        aria-label="Arian Šajina"
-      ></video>
+      <img class="about-img" src={photo} width="768" height="768" alt="Arian Šajina" />
       <div class="txt about-text">
         <Content />
       </div>
     </div>
   </div>
 </Sub>
-
-<script>
-  import "../scripts/about-video";
-</script>
 
 <style>
   .about-wrap {
@@ -59,6 +41,7 @@ const { Content } = await render(entry);
     width: 300px;
     max-width: 100%;
     height: auto;
+    image-rendering: pixelated;
   }
   .about-text {
     width: 100%;

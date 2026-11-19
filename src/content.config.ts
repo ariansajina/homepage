@@ -39,6 +39,21 @@ const letters = defineCollection({
         caption: z.string().optional(),
       })
       .optional(),
+    // Pictures at the very end of the text (below the last paragraph); two or more sit
+    // side by side.
+    closing: z
+      .array(
+        z.object({
+          src: z.string(),
+          alt: z.string(),
+          width: z.number().int().positive().optional(),
+          height: z.number().int().positive().optional(),
+          caption: z.string().optional(),
+        }),
+      )
+      .optional(),
+    // One caption beneath all the closing images.
+    closingCaption: z.string().optional(),
   }),
 });
 
