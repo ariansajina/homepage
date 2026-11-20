@@ -2,13 +2,18 @@
 // Dances: short videos in a 4-column grid (2 on narrow screens). Opening one plays it
 // full screen (real full screen where the browser allows it, else a window-filling
 // overlay) and pauses the music until it closes. Clips come from src/data/dances.yaml.
+import { createHash } from "node:crypto";
 import { getCollection } from "astro:content";
 import Sub from "../layouts/Sub.astro";
 import { media } from "../lib/media";
 
+// A clip without a title is captioned with a short hash of its id: stable between builds.
+const caption = (id: string, title: string) =>
+  title.trim() || createHash("sha1").update(id).digest("hex").slice(0, 7);
+
 const dances = (await getCollection("dances")).map(({ id, data }) => ({
   id,
-  title: data.title,
+  title: caption(id, data.title),
   length: data.length,
   video: media(data.video),
   poster: media(data.poster),

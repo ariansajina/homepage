@@ -1,6 +1,6 @@
 # Dances: short videos in a 4-column grid. video/poster = keys in the R2 bucket.
 - id: dance-01
-  title: "IMG_0257"
+  title: ""
   length: "0:41"
   video: "dances/dance-01.mp4"
   poster: "dances/dance-01-poster.jpg"

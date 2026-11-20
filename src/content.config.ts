@@ -77,7 +77,7 @@ const about = defineCollection({
 const dances = defineCollection({
   loader: file("src/data/dances.yaml"),
   schema: z.object({
-    title: z.string(),
+    title: z.string().default(""),
     length: z.string(),
     video: z.string().default(""),
     poster: z.string().default(""),
