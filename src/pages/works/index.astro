@@ -7,7 +7,10 @@ import Sub from "../../layouts/Sub.astro";
 import { sortedWorks } from "../../lib/content";
 import { media } from "../../lib/media";
 
-const clip = media("works/delaj.mp4");
+// Dithered at 400 px wide (the most device pixels the clip ever fills: 200 CSS px at 2x
+// on desktop, 34vw at 3x on phones), each dot then scaled up ~3.2x: big dots compress far
+// better than single-pixel ones. Silent H.264, CRF 26, faststart.
+const clip = media("works/delaj-dither.mp4");
 
 const works = await sortedWorks();
 const t = works.map((w) => w.data.date.getTime());
@@ -47,7 +50,7 @@ const items = works.map((w, i) => ({
         class={`clip clip-${corner}`}
         src={clip}
         width="1280"
-        height="2276"
+        height="2280"
         autoplay
         muted
         loop
