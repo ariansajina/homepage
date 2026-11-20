@@ -67,7 +67,7 @@ const filters = kinds.length > 1 ? ["all", ...kinds] : [];
                         p.src ? (
                           <img class="pic" src={p.src} alt={p.alt} loading="lazy" />
                         ) : (
-                          <div class="pic">[{p.alt}]</div>
+                          <div class="pic" role="img" aria-label={p.alt} />
                         ),
                       )}
                     </div>
@@ -205,14 +205,11 @@ const filters = kinds.length > 1 ? ["all", ...kinds] : [];
     grid-template-columns: minmax(0, 1fr);
   }
   .pic {
-    display: grid;
-    place-items: center;
+    display: block;
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
     background: var(--placeholder);
-    color: var(--muted);
-    font-size: 12px;
   }
   .showmore {
     margin-top: 10px;

@@ -26,6 +26,16 @@ body {
   background: var(--paper);
 }
 
+/* Images show nothing until they load: no alt text in the box while loading, and a
+   failed one is hidden (Base.astro marks it), so no broken-image icon either. The alt
+   text stays in the markup for screen readers. */
+img {
+  color: transparent;
+}
+img.img-failed {
+  visibility: hidden;
+}
+
 a {
   color: var(--ink);
   text-decoration: none;

@@ -56,6 +56,15 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     <meta name="twitter:card" content={card} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <ClientRouter fallback="swap" />
+    {/* Inline and in the head so it is listening before any <img> can fail; the document
+        survives client-router swaps, so this runs once and covers every page. */}
+    <script is:inline>
+      document.addEventListener(
+        "error",
+        (e) => e.target instanceof HTMLImageElement && e.target.classList.add("img-failed"),
+        true,
+      );
+    </script>
   </head>
   <body>
     <slot />
