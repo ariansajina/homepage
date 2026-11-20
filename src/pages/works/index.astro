@@ -52,6 +52,7 @@ const items = works.map((w, i) => ({
         muted
         loop
         playsinline
+        preload="auto"
         aria-hidden="true"
         tabindex="-1"
         data-works-video
@@ -78,7 +79,8 @@ const items = works.map((w, i) => ({
        MIN_GAP (5%) of this height is at least 1.3em. */
     height: max(520px, calc(95vh - 200px), calc(26em + 1.3em * (var(--n, 1) - 1)));
     text-align: left;
-    font-size: 16px;
+    /* Same size as the about page text. */
+    font-size: clamp(13px, calc(1.6vh + 2px), 17px);
     line-height: 1.2;
     text-transform: lowercase;
   }
@@ -107,6 +109,17 @@ const items = works.map((w, i) => ({
     transform: translateX(calc(var(--f, 0) * -100%));
   }
   @media (max-width: 600px) {
+    /* One screen, no scrolling: the timeline takes what is left under the top bar and
+       above the corner decks, floored so neighbours stay a line apart. */
+    .works {
+      min-height: 100svh;
+      padding-bottom: 96px;
+    }
+    .timeline {
+      font-size: 15px;
+      margin-top: 0;
+      height: max(calc(100svh - 96px - 96px), calc(1.3em * var(--n, 1) / 0.95));
+    }
     .clip {
       width: 34vw;
     }
